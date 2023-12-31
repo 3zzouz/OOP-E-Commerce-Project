@@ -141,27 +141,32 @@ public class ProductManager extends User {
                     System.out.println("Enter the new name : ");
                     String name = sc.next();
                     product.setName(name);
+                    System.out.println("Product Name updated successfully");
                     break;
                 case 2:
                     System.out.println("Enter the new description : ");
                     String description = sc.next();
                     product.setDescription(description);
+                    System.out.println("Product Description updated successfully");
                     break;
                 case 3:
                     System.out.println("Enter the new price : ");
                     double price = sc.nextDouble();
                     product.setPrice(price);
+                    System.out.println("Product Price updated successfully");
                     break;
                 case 4:
                     System.out.println("Enter the new stock quantity : ");
                     int stockQuantity = sc.nextInt();
                     sc.nextLine();
                     product.setStockQuantity(stockQuantity);
+                    System.out.println("Product Stock Quantity updated successfully");
                     break;
                 case 5:
                     System.out.println("Enter the new image URL : ");
                     String imageUrl = sc.next();
                     product.setImageUrl(imageUrl);
+                    System.out.println("Product Image URL updated successfully");
                     break;
                 case 6:
                     System.out.println("Exit");
@@ -184,30 +189,28 @@ public class ProductManager extends User {
 
     public static ArrayList<Product> searchProducts(String searchTerm, Map<String, Object> filters) {
         ArrayList<Product> results = new ArrayList<>();
-
         for (Product product : products.values()) {
+
             // Check if the product name contains the search term
             if (product.getName().toLowerCase().contains(searchTerm.toLowerCase())) {
                 boolean match = true;
 
                 // Check each filter
-                for (Map.Entry<String, Object> filter : filters.entrySet()) {
-                    String filterField = filter.getKey();
-                    Object filterValue = filter.getValue();
-
+                for (String filterField : filters.keySet()) {
+                    Object filterValue = filters.get(filterField);
                     // Match the filter field with the corresponding product info field
                     switch (filterField) {
                         case "price":
                             double price = product.getPrice();
                             Double[] priceRange = (Double[]) filterValue;
-                            if (price < priceRange[0] && priceRange[0] != 0
-                                    || price > priceRange[1] && priceRange[1] != 0) {
+                            if ((price < priceRange[0] && priceRange[0] != 0)
+                                    || (price > priceRange[1] && priceRange[1] != 0)) {
                                 match = false;
                             }
                             break;
                         case "quantity":
-                            if (product.getStockQuantity() == Integer.parseInt(filterValue.toString())
-                                    || product.getStockQuantity() == 0) {
+                            if (product.getStockQuantity() < Integer.parseInt(filterValue.toString())
+                                    && product.getStockQuantity() != 0) {
                                 match = false;
                             }
                             break;
@@ -244,11 +247,10 @@ public class ProductManager extends User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
-        System.out.println("Enter discount percentage: ");
+        System.out.println("Enter discount percentage: (0-100)");
         double percentage = sc.nextDouble();
-        System.out.println("Enter discount expiry date: ");
+        System.out.println("Enter discount expiry date: (dd/mm/yyyy hh:mm:ss)");
         String expiryDate = sc.next();
-        ;
         Discount.addDiscount(code, percentage, expiryDate);
     }
 
@@ -256,11 +258,18 @@ public class ProductManager extends User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
-        ;
+        if (Discount.getDiscount(code) == null) {
+            System.out.println("Discount not found");
+            return;
+        }
         Discount.removeDiscount(code);
     }
 
     public void printDiscounts() {
+        if (Discount.discounts == null || Discount.discounts.isEmpty()) {
+            System.out.println("No discounts available");
+            return;
+        }
         Discount.printDiscounts();
     }
 
@@ -268,7 +277,10 @@ public class ProductManager extends User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
-        ;
+        if (Discount.discounts == null) {
+            System.out.println("There are no discounts");
+            return;
+        }
         Discount discount = Discount.getDiscount(code);
         if (discount == null) {
             System.out.println("Discount not found");

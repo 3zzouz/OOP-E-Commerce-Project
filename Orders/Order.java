@@ -108,8 +108,9 @@ public class Order {
             System.out.println("Enter your discount code : ");
             String code = sc.nextLine();
             Discount discount = Discount.getDiscount(code);
-            if (discount != null) {
-                totalPrice -= totalPrice * discount.getPercentage();
+            // if the discount is valid and not expired then apply it
+            if (discount != null && discount.getExpiryDate().getDate().getTime() > System.currentTimeMillis()) {
+                totalPrice *= (1 - discount.getPercentage() / 100);
             }
         }
         try {

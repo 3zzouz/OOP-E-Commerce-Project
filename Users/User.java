@@ -93,7 +93,7 @@ public abstract class User {
     // an override for the toString method
     public String toString() {
         return this.username + " , " + this.permissionLevel + " , " + this.name + " , " + this.email + " , "
-                + this.Password + " , " + this.address
+                + this.Password.getHashedPassword() + " , " + this.address
                 + " , " + this.age + " , "
                 + this.phoneNumber + " , " + this.accountCreationDate.getSDate() + " , " + this.lastLoginDate.getSDate()
                 + " , "
@@ -184,7 +184,7 @@ public abstract class User {
         System.out.println("Enter the name of the product you want to search : ");
         Scanner sc = new Scanner(System.in);
         String productName = sc.nextLine();
-        System.out.println("Enter the quantity of the product you want to search : (0 to ignore quantity)");
+        System.out.println("Enter the minimum quantity of the product you want to search : (0 to ignore quantity)");
         int quantity = sc.nextInt();
         sc.nextLine();
         System.out.println(

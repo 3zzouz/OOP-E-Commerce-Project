@@ -40,8 +40,9 @@ public class Customer extends User {
     }
 
     public String toString() {
-        return super.toString() + " , " + paymentMethods[0].toString() + " , "
-                + paymentMethods[1].toString() + " , " + preferredPaymentMethod.toString() + " , "
+        return super.toString() + " , " + (paymentMethods[0] != null ? paymentMethods[0].toString() : "") + " , "
+                + (paymentMethods[1] != null ? paymentMethods[1].toString() : "") + " , "
+                + (preferredPaymentMethod != null ? preferredPaymentMethod.toString() : "") + " , "
                 + occurenceCounter[0] + " , " + occurenceCounter[1];
     }
 

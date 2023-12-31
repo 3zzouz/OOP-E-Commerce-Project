@@ -45,7 +45,7 @@ public class PaymentMethod {
     }
 
     // override toString method
-    public String toString() {
+    public String toString() {    
         return name + " , " + balance;
     }
 }

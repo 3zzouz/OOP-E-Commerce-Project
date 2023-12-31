@@ -4,6 +4,7 @@ import java.util.Scanner;
 import Products.Books;
 import Products.Clothing;
 import Products.Electronics;
+import Products.Product;
 import Products.SportsAndOutDoor;
 import Users.Admin;
 import Users.Customer;
@@ -50,6 +51,9 @@ public class Main {
                     "sportsAndOutDoor1description", 400.50, 40, "sportsAndOutDoor1imgurl", "sportsAndOutDoor1type",
                     "sportsAndOutDoor1brand", "sportsAndOutDoor1material", "sportsAndOutDoor1weight",
                     "sportsAndOutDoor1sportType");
+            for (int i = 0; i < 4; i++) {
+                Product.incrementIdCounter();
+            }
             ProductManager.products.put(sportsAndOutDoor1.getId(), sportsAndOutDoor1);
 
             User.users.put(customer1.getUsername(), customer1);
@@ -108,7 +112,7 @@ public class Main {
                     System.out.println("2- View a user");
                     System.out.println("3- Block a user");
                     System.out.println("4- View all products");
-                    System.out.println("5- View a product");
+                    System.out.println("5- Filter products");
                     System.out.println("6- Add a product");
                     System.out.println("7- Edit a product");
                     System.out.println("8- Delete a product");
@@ -160,7 +164,7 @@ public class Main {
                     System.out.println("Welcome Product Manager");
                     System.out.println("Please choose one of the following options : ");
                     System.out.println("1- View all products");
-                    System.out.println("2- View a product");
+                    System.out.println("2- Filter products");
                     System.out.println("3- Add a product");
                     System.out.println("4- Edit a product");
                     System.out.println("5- Delete a product");
@@ -170,7 +174,6 @@ public class Main {
                     System.out.println("9- Show all discounts");
                     System.out.println("10- Logout");
                     System.out.println("11- Exit");
-
                     choix = sc.nextInt();
                     sc.nextLine();
                     switch (choix) {
@@ -220,7 +223,7 @@ public class Main {
                     System.out.println("Welcome Customer");
                     System.out.println("Please choose one of the following options : ");
                     System.out.println("1- View all products");
-                    System.out.println("2- Search for a product");
+                    System.out.println("2- Filter products");
                     System.out.println("3- Add to cart");
                     System.out.println("4- View cart");
                     System.out.println("5- Remove from cart");

@@ -2,19 +2,23 @@ package Discount;
 
 import java.util.ArrayList;
 
+import Utility.DateFormat;
+
 /**
- * The Discount class represents a discount that can be applied to products in an e-commerce system.
+ * The Discount class represents a discount that can be applied to products in
+ * an e-commerce system.
  * It stores the discount code, percentage, and expiry date.
  * Discounts can be added, removed, retrieved, and printed.
  */
 public class Discount {
     private String code;
     private double percentage;
-    private String expiryDate;
-    public static ArrayList<Discount> discounts;
+    private DateFormat expiryDate;
+    public static ArrayList<Discount> discounts = new ArrayList<Discount>();
 
     /**
-     * Constructs a Discount object with the specified code, percentage, and expiry date.
+     * Constructs a Discount object with the specified code, percentage, and expiry
+     * date.
      * The discount is added to the list of discounts.
      *
      * @param code       the discount code
@@ -24,8 +28,8 @@ public class Discount {
     public Discount(String code, double percentage, String expiryDate) {
         this.code = code;
         this.percentage = percentage;
-        this.expiryDate = expiryDate;
-        discounts.add(this);
+        DateFormat df = new DateFormat(expiryDate);
+        this.expiryDate = df;
     }
 
     /**
@@ -51,18 +55,27 @@ public class Discount {
      *
      * @return the expiry date of the discount
      */
-    public String getExpiryDate() {
+    public DateFormat getExpiryDate() {
         return this.expiryDate;
     }
 
     /**
-     * Adds a new discount with the specified code, percentage, and expiry date to the list of discounts.
+     * Adds a new discount with the specified code, percentage, and expiry date to
+     * the list of discounts.
      *
      * @param code       the discount code
      * @param percentage the discount percentage
      * @param expiryDate the expiry date of the discount
      */
     public static void addDiscount(String code, double percentage, String expiryDate) {
+        if (percentage < 0 || percentage > 100) {
+            System.out.println("Invalid percentage");
+            return;
+        }
+        if (expiryDate == null || expiryDate.isEmpty()) {
+            System.out.println("Invalid expiry date");
+            return;
+        }
         discounts.add(new Discount(code, percentage, expiryDate));
     }
 
@@ -132,7 +145,7 @@ public class Discount {
      * @param expiryDate the expiry date of the discount
      */
     public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
+        this.expiryDate = new DateFormat(expiryDate);
     }
 
 }

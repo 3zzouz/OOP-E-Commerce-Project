@@ -30,7 +30,6 @@ public abstract class Product {
         sc.nextLine();
         System.out.println("Enter product image URL: ");
         String imageUrl = sc.nextLine();
-        ;
         setName(name);
         setDescription(description);
         setPrice(price);
@@ -62,6 +61,10 @@ public abstract class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public static void incrementIdCounter() {
+        idCounter++;
     }
 
     public void setPrice(double price) {

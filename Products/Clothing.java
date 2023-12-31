@@ -20,7 +20,7 @@ public class Clothing extends Product {
         String[] colors = sc.nextLine().split(" ");
         setSizes(sizes);
         setColors(colors);
-        sc.close();
+        ;
     }
 
     // parameterized constructor

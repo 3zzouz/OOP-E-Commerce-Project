@@ -26,7 +26,7 @@ public class Books extends Product {
         String publisher = sc.nextLine();
         System.out.println("Enter the genres of the book: ");
         String[] genres = sc.nextLine().split(" ");
-        sc.close();
+        ;
         setAuthor(author);
         setPublisher(publisher);
         setGenres(genres);

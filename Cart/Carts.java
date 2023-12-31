@@ -94,25 +94,13 @@ public class Carts implements Cloneable {
     public String toString() {
         if (products.isEmpty()) {
             System.out.println("Cart is empty");
-            return null;
+            return "";
         }
-        String result = "";
+        String result = "Products : ";
         for (Product product : products.values()) {
             result += product.toString() + "//";
         }
-        return result + " , " + totalPrice;
-    }
-    // TODO : i should complete two methods one to transform a customer to a string and vice versa
-    public static Carts fromStringToCart(String cartString, Customer custom) {
-        String[] products = cartString.split("//");
-        Carts cart = new Carts(custom);
-        for (String product : products) {
-            String[] productInfo = product.split(",");
-            int id = Integer.parseInt(productInfo[0]);
-            int quantity = Integer.parseInt(productInfo[1]);
-            cart.addProduct(id, quantity);
-        }
-        return cart;
+        return result + " ,Total Price : " + totalPrice;
     }
 
     // to verify if the cart is empty or not

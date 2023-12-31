@@ -3,42 +3,34 @@ package Users;
 import java.util.Scanner;
 
 public class Admin extends ProductManager {
-    protected Admin() {
+    public Admin() {
         super();
         this.permissionLevel = 0;
         users.put(username, this);
-        updateUsersLists();
+
         System.out.println("Admin created successfully");
     }
 
-    // second constructor for Admin class
-    protected Admin(String username, String name, String email, String address, String Password, int age,
-            int phoneNumber, String accountCreationDate, String lastLoginDate, String isBlocked,
-            String isLoggedIn) {
-
-        super(username, name, email, address, Password, age, phoneNumber, accountCreationDate, lastLoginDate, isBlocked,
-                isLoggedIn);
-        setUsers();
+    public Admin(String name, String email, String address, String username, int age, int phoneNumber,
+            String password) {
+        super(name, email, address, username, age, phoneNumber, password);
         this.permissionLevel = 0;
-        users.put(username, this);
-        updateUsersLists();
-        System.out.println("Admin created successfully");
     }
 
-    protected void viewAllUsers() {
-        setUsers();
+    public void viewAllUsers() {
+
         System.out.println("Users : ");
         for (User user : User.users.values()) {
             System.out.println(user.toString());
         }
     }
 
-    protected void viewUser() {
-        setUsers();
+    public void viewUser() {
+
         System.out.println("Enter the person's username: ");
         Scanner sc = new Scanner(System.in);
         String username = sc.nextLine();
-        sc.close();
+        ;
         if (!users.containsKey(username)) {
             System.out.println("User not found");
             return;
@@ -56,12 +48,12 @@ public class Admin extends ProductManager {
         System.out.println("Permission Level: " + Integer.toString(user.getPermissionLevel()));
     }
 
-    protected void blockUser() {
-        setUsers();
+    public void blockUser() {
+
         System.out.println("Enter the person's username: (to block)");
         Scanner sc = new Scanner(System.in);
         String username = sc.nextLine();
-        sc.close();
+        ;
         if (!existUser(username)) {
             System.out.println("User not found");
             return;
@@ -70,17 +62,17 @@ public class Admin extends ProductManager {
         users.get(username).logout();
     }
 
-    protected void unblockUser() {
-        setUsers();
+    public void unblockUser() {
+
         System.out.println("Enter the person's username: (to unblock)");
         Scanner sc = new Scanner(System.in);
         String username = sc.nextLine();
-        sc.close();
+        ;
         if (!existUser(username)) {
             System.out.println("User not found");
             return;
         }
         users.get(username).setBlocked(false);
-        updateUsersLists();
+
     }
 }

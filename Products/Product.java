@@ -27,9 +27,10 @@ public abstract class Product {
         double price = sc.nextDouble();
         System.out.println("Enter product stock quantity: ");
         int stockQuantity = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter product image URL: ");
         String imageUrl = sc.nextLine();
-        sc.close();
+        ;
         setName(name);
         setDescription(description);
         setPrice(price);

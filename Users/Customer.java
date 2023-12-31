@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import Cart.Carts;
+import Exceptions.WrongPasswordException;
 import Orders.Order;
 import PaymentMethod.CreditCard;
 import PaymentMethod.PaymentMethod;
@@ -14,32 +15,28 @@ import PaymentMethod.Paypal;
 public class Customer extends User {
     private HashMap<String, Order> orders;
     private Carts cart;
-    private PaymentMethod[] paymentMethods;
+    private PaymentMethod[] paymentMethods = new PaymentMethod[2];
     private PaymentMethod preferredPaymentMethod;
     private int[] occurenceCounter = new int[2];
 
-    Customer() {
+    public Customer() {
         super();
         this.orders = new HashMap<>();
-        this.paymentMethods = new PaymentMethod[2];
         this.permissionLevel = 2;
-        appendFileAccounts(this);
         users.put(username, this);
         System.out.println("Account Created Successfully");
-        updateCustomersInformation();
     }
 
-    protected Customer(String username, String name, String email, String address, String Password, int age,
-            int phoneNumber, String accountCreationDate, String lastLoginDate, String isBlocked,
-            String isLoggedIn) {
-
-        super(username, name, email, address, Password, age, phoneNumber, accountCreationDate, lastLoginDate, isBlocked,
-                isLoggedIn);
+    // parameterized constructor
+    public Customer(String name, String email, String address, String username, int age,
+            int phoneNumber, String password) {
+        super(name, email, address, username, age, phoneNumber,
+                password);
         this.orders = new HashMap<>();
+        this.cart = new Carts(this);
         this.paymentMethods = new PaymentMethod[2];
-        this.permissionLevel = 2;
-        updateCustomersInformation();
-
+        this.preferredPaymentMethod = null;
+        this.occurenceCounter = new int[2];
     }
 
     public String toString() {
@@ -56,11 +53,8 @@ public class Customer extends User {
         return s;
     }
 
-    public void updateCustomersInformation() {
-        writeFileAccounts(users);
-    }
-
-    // supposed that there are 0 to 2 payment methods per Customer
+    // supposed that there are 0 to 2 payment methods per Customer the first one is
+    // credit card and the second one is paypal
     public void addPaymentMethod() {
         int choix = 0;
         Scanner sc = new Scanner(System.in);
@@ -69,19 +63,23 @@ public class Customer extends User {
             System.out.println("1- Credit Card");
             System.out.println("2- Paypal");
             System.out.println("3- Exit");
+            choix = sc.nextInt();
+            sc.nextLine();
             switch (choix) {
                 case 1:
                     try {
                         System.out.println("Enter your Credit Card Number : ");
                         int cardNumber = sc.nextInt();
+                        sc.nextLine();
                         System.out.println("Enter your Credit Card Holder Name : ");
-                        String name = sc.next();
+                        String name = sc.nextLine();
                         System.out.println("Enter your Credit Card Expiry Date (format: dd/MM/yyyy) : ");
-                        String expiryDateString = sc.next();
+                        String expiryDateString = sc.nextLine();
                         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                         Date expiryDate = formatter.parse(expiryDateString);
                         System.out.println("Enter your Credit Card CVV : ");
                         int cvv = sc.nextInt();
+                        sc.nextLine();
                         this.paymentMethods[0] = new CreditCard(cardNumber, name, expiryDate, cvv);
                         break;
                     } catch (Exception e) {
@@ -92,9 +90,9 @@ public class Customer extends User {
                 case 2:
                     try {
                         System.out.println("Enter your Paypal Email : ");
-                        String email = sc.next();
+                        String email = sc.nextLine();
                         System.out.println("Enter your Paypal Password : ");
-                        String password = sc.next();
+                        String password = sc.nextLine();
                         this.paymentMethods[1] = new Paypal(email, password);
                         break;
                     } catch (Exception e) {
@@ -108,12 +106,13 @@ public class Customer extends User {
                     System.out.println("Invalid choice");
             }
         }
-        sc.close();
+        ;
     }
 
-    public void login(String password) {
+    public void login(String password) throws WrongPasswordException {
         super.login(password);
         this.cart = new Carts(this);
+
     }
 
     public void logout() {
@@ -139,11 +138,13 @@ public class Customer extends User {
             return;
         }
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter product name: ");
+        System.out.println("Enter product id: ");
         int productID = sc.nextInt();
+        sc.nextLine();
         System.out.println("Enter quantity: ");
         int quantity = sc.nextInt();
-        sc.close();
+        sc.nextLine();
+        ;
         cart.addProduct(productID, quantity);
     }
 
@@ -155,7 +156,8 @@ public class Customer extends User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter product id to remove : ");
         int productid = sc.nextInt();
-        sc.close();
+        sc.nextLine();
+        ;
         cart.removeProduct(productid);
     }
 
@@ -195,11 +197,25 @@ public class Customer extends User {
     public PaymentMethod getPaymentMethod(int index) {
         if (index > 1)
             throw new IndexOutOfBoundsException();
+        if (index == 0 && paymentMethods[0] == null) {
+            throw new IllegalArgumentException("No Credit Card added");
+        }
+        if (index == 1 && paymentMethods[1] == null) {
+            throw new IllegalArgumentException("No Paypal added");
+        }
         return paymentMethods[index];
     }
 
     public void setCart(Carts carts) {
         this.cart = carts;
+    }
+
+    public void viewPaymentMethods() {
+        System.out.println("Payment Methods : ");
+        for (PaymentMethod paymentMethod : paymentMethods) {
+            if (paymentMethod != null)
+                System.out.println(paymentMethod.toString());
+        }
     }
 
 }

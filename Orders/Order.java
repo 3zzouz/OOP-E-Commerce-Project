@@ -6,7 +6,9 @@ import java.util.Scanner;
 
 import Discount.Discount;
 import Products.Product;
+import Shipping.ExpressShippingMethod;
 import Shipping.ShippingMethod;
+import Shipping.StandardShipping;
 import Users.Customer;
 import Users.ProductManager;
 import Utility.DateFormat;
@@ -75,11 +77,32 @@ public class Order {
             totalPrice += product.getPrice() * product.getStockQuantity();
             PushNotificationToProductManager(product.getName(), quantityInStock);
         }
+        // to choose the shipping method
+        System.out.println("Choose the shipping method : ");
+        System.out.println("1- Standard Shipping");
+        System.out.println("2- Express Shipping");
+        Scanner sc = new Scanner(System.in);
+        int choix = sc.nextInt();
+        sc.nextLine();
+        while (choix != 1 && choix != 2) {
+            System.out.println("Invalid choice");
+            System.out.println("Choose the shipping method : ");
+            System.out.println("1- Standard Shipping");
+            System.out.println("2- Express Shipping");
+            choix = sc.nextInt();
+            sc.nextLine();
+        }
+        if (choix == 1) {
+
+            setShippingMethod(new StandardShipping());
+        } else {
+
+            setShippingMethod(new ExpressShippingMethod());
+        }
         // to apply shipping fees
         totalPrice = calculateTotalPrice();
         // Applying discount
         System.out.println("Do you have a discount code ? (y/n)");
-        Scanner sc = new Scanner(System.in);
         String choice = sc.nextLine();
         if (choice.equals("y")) {
             System.out.println("Enter your discount code : ");
@@ -110,6 +133,7 @@ public class Order {
             // update the total price of the cart based on the discount and shipping cost
             // and whether the order was successful or not
             customer.getCart().setTotalPrice(totalPrice);
+            customer.setPreferredPaymentMethod();
         }
     }
 
@@ -184,6 +208,9 @@ public class Order {
                 System.out.println("1- PaCredit Card");
                 System.out.println("2- Paypal");
                 System.out.println("3- Exit");
+                Scanner sc = new Scanner(System.in);
+                choix = sc.nextInt();
+                sc.nextLine();
                 switch (choix) {
                     case 1:
                         customer.getPaymentMethod(0).reduceBalance(totalPrice);
@@ -202,19 +229,18 @@ public class Order {
             }
             customer.setPreferredPaymentMethod();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return;
+            throw new RuntimeException("Payment Failed");
         }
     }
 
     // overriding toString method
     public String toString() {
         String res = "";
-        res += orderID + " , ";
-        res += orderDate + " , ";
-        res += orderStatus + " , ";
+        res += orderID + ",";
+        res += orderDate + ",";
+        res += orderStatus + ",";
         for (Product product : products.values())
-            res += product.toString() + " , ";
+            res += product.toString() + ",";
         res += totalPrice;
         return res;
     }
@@ -241,4 +267,5 @@ public class Order {
     public String getOrderID() {
         return orderID;
     }
+
 }

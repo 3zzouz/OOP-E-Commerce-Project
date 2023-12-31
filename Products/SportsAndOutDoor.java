@@ -23,7 +23,7 @@ public class SportsAndOutDoor extends Product {
         String weight = sc.nextLine();
         System.out.println("Enter the sport type of the product: ");
         String sportType = sc.nextLine();
-        sc.close();
+        ;
         setType(type);
         setBrand(brand);
         setMaterial(material);
@@ -44,7 +44,7 @@ public class SportsAndOutDoor extends Product {
 
     // toString method
     public String toString() {
-        return "SportsAndOutDoor , " + this.toString() + " , " + this.type + " , " + this.brand + " , " + this.material
+        return "SportsAndOutDoor , " + super.toString() + " , " + this.type + " , " + this.brand + " , " + this.material
                 + " , " + this.weight
                 + " , " + this.sportType;
     }

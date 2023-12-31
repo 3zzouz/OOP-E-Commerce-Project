@@ -8,23 +8,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 import Exceptions.WrongPasswordException;
-import Interfaces.AccountRW;
 import Products.Product;
 import Security.HashPasswords;
 import Utility.DateFormat;
 
-public abstract class User implements AccountRW {
+public abstract class User {
     protected String name, email, address, username;
     protected int age, phoneNumber;
     protected DateFormat accountCreationDate, lastLoginDate;
     protected boolean isBlocked, isLoggedIn;
     protected HashPasswords Password;
     protected int permissionLevel = 2;
-    protected static HashMap<String, User> users;
+    public static HashMap<String, User> users;
 
     // constructor for the user class
     public User() {
-        setUsers();
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter desired UserName: ");
         String username = sc.nextLine();
@@ -41,14 +40,15 @@ public abstract class User implements AccountRW {
         setEmail(email);
         System.out.println("Enter your age: ");
         int age = sc.nextInt();
+        sc.nextLine();
         setAge(age);
         System.out.println("Enter your phone number: ");
         int phoneNumber = sc.nextInt();
+        sc.nextLine();
         setPhoneNumber(phoneNumber);
         System.out.println("Enter your address : ");
-        address = sc.nextLine();
-        setAddress(address);
-
+        String addres = sc.nextLine();
+        setAddress(addres);
         System.out.println("Enter your Password: ");
         String Password = sc.nextLine();
         System.out.println("Confirm Password : ");
@@ -60,7 +60,7 @@ public abstract class User implements AccountRW {
             confirmPassword = sc.nextLine();
         }
         setPassword(Password);
-        sc.close();
+        ;
         Date date = new Date();
         this.accountCreationDate = new DateFormat(date);
         this.lastLoginDate = new DateFormat(date);
@@ -68,45 +68,26 @@ public abstract class User implements AccountRW {
         setIsLoggedIn(false);
     }
 
-    // second constructor for the user class
-    public User(String username, String name, String email, String address, String Password, int age,
-            int phoneNumber,
-            String accountCreationDate, String lastLoginDate, String isBlocked, String isLoggedIn) {
-        setUsername(username);
+    // add paramaterized constructor
+    public User(String name, String email, String address, String username, int age, int phoneNumber, String Password) {
         setName(name);
         setEmail(email);
         setAddress(address);
-        setPassword(Password);
+        setUsername(username);
         setAge(age);
         setPhoneNumber(phoneNumber);
-        this.accountCreationDate = new DateFormat(accountCreationDate);
-        this.lastLoginDate = new DateFormat(lastLoginDate);
-        if (isBlocked.equals("true")) {
-            setBlocked(true);
-        } else {
-            setBlocked(false);
-        }
-        if (isLoggedIn.equals("true")) {
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-    }
-
-    // to write the users in the file
-    public void updateUsersLists() {
-        writeFileAccounts(users);
+        setPassword(Password);
+        Date date = new Date();
+        this.accountCreationDate = new DateFormat(date);
+        this.lastLoginDate = new DateFormat(date);
+        setBlocked(false);
+        setIsLoggedIn(false);
     }
 
     // to check if the user existUsers or not by checking the username
-    public boolean existUser(String username) {
-        setUsers();
-        for (User user : users.values()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean existUser(String username) {
+
+        return users.containsKey(username);
     }
 
     // an override for the toString method
@@ -120,38 +101,9 @@ public abstract class User implements AccountRW {
                 + this.isLoggedIn;
     }
 
-    // to synchronize the users in the file with the users in the program
-    protected void setUsers() {
-        ArrayList<String> usersList = readfileAccounts();
-        users.clear();
-        for (String user : usersList) {
-            String[] userInformation = user.split(" , ");
-            if (userInformation[1].equals("0")) {
-                users.put(userInformation[0],
-                        new Admin(userInformation[0], userInformation[2], userInformation[3], userInformation[5],
-                                userInformation[4], Integer.parseInt(userInformation[6]),
-                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
-                                userInformation[10], userInformation[11]));
-            } else if (userInformation[1].equals("2")) {
-                users.put(userInformation[0],
-                        new Customer(userInformation[0], userInformation[2], userInformation[3], userInformation[5],
-                                userInformation[4], Integer.parseInt(userInformation[6]),
-                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
-                                userInformation[10], userInformation[11]));
-            } else if (userInformation[1].equals("3")) {
-                users.put(userInformation[0],
-                        new ProductManager(userInformation[0], userInformation[2], userInformation[3],
-                                userInformation[5],
-                                userInformation[4], Integer.parseInt(userInformation[6]),
-                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
-                                userInformation[10], userInformation[11]));
-            }
-        }
-    }
-
     // login function
-    public void login(String Password) {
-        setUsers();
+    public void login(String Password) throws WrongPasswordException {
+
         if (this.isBlocked == true) {
             System.out.println("Your account is blocked. Please contact an admin to unblock it.");
             return;
@@ -160,19 +112,25 @@ public abstract class User implements AccountRW {
             System.out.println("You are already logged in.");
             return;
         }
-        try {
-            if (this.Password.verifyPassword(Password)) {
-                this.isLoggedIn = true;
-                setLastLoginDate(new DateFormat(new Date()));
-                users.put(this.username, this);
-                updateUsersLists();
-                System.out.println("You are now logged in. Welcome " + this.name + "!");
-            } else {
-                throw new WrongPasswordException();
-            }
-        } catch (WrongPasswordException e) {
-            System.out.println(e.getMessage());
+
+        if (this.Password.verifyPassword(Password) == true) {
+            this.isLoggedIn = true;
+            setLastLoginDate(new DateFormat(new Date()));
+            users.put(this.username, this);
+        } else {
+            throw new WrongPasswordException();
         }
+    }
+
+    public static User login(String username, String Password) throws WrongPasswordException {
+        if (!users.containsKey(username)) {
+            System.out.println("User not found");
+            return null;
+        }
+        User user = users.get(username);
+        user.login(Password);
+        System.out.println("You are now logged in. Welcome " + user.name + "!");
+        return user;
     }
 
     // logout function
@@ -182,18 +140,32 @@ public abstract class User implements AccountRW {
         } else {
             this.isLoggedIn = false;
             users.put(this.username, this);
-            updateUsersLists();
         }
     }
 
+    public static void logout(String username) {
+        if (!users.containsKey(username)) {
+            System.out.println("User not found");
+            return;
+        }
+        User user = users.get(username);
+        user.logout();
+    }
+
     // change password function
-    public void changePassword(String oldPassword, String newPassword) {
-        setUsers();
+    public static void changePassword(String username, String oldPassword, String newPassword) {
+
         try {
-            if (this.Password.verifyPassword(oldPassword)) {
-                this.Password = new HashPasswords(newPassword);
-                users.put(this.username, this);
-                updateUsersLists();
+            User user = users.get(username);
+            if (!existUser(username)) {
+                System.out.println("User not found");
+                return;
+            }
+            if (user.Password.verifyPassword(oldPassword)) {
+                user.setPassword(newPassword);
+                users.put(username, user);
+                System.out.println("Password changed successfully");
+
             } else {
                 throw new WrongPasswordException();
             }
@@ -205,7 +177,7 @@ public abstract class User implements AccountRW {
     /**
      * this method to search for a product (using filters)
      */
-    public void searchProduct() {
+    public static void searchProduct() {
         // i am going to use the method searchProducts from ProductManager
         // ask the user to give the information about the product he wants to search
         // then call the method searchProducts from ProductManager
@@ -214,13 +186,14 @@ public abstract class User implements AccountRW {
         String productName = sc.nextLine();
         System.out.println("Enter the quantity of the product you want to search : (0 to ignore quantity)");
         int quantity = sc.nextInt();
+        sc.nextLine();
         System.out.println(
                 "Enter the min and max price of the product you want to search : (to search for a particular price enter the same min and max and if there is no min or max enter 0 for the non desired value)");
         System.out.println("Min price : ");
         double minPrice = sc.nextDouble();
         System.out.println("Max price : ");
         double maxPrice = sc.nextDouble();
-        sc.close();
+        ;
         if (minPrice > maxPrice) {
             System.out.println("Invalid input");
             return;
@@ -229,7 +202,7 @@ public abstract class User implements AccountRW {
         filtres.put("price", new Double[] { minPrice, maxPrice });
         filtres.put("quantity", quantity);
 
-        List<Product> results = ProductManager.searchProducts(productName, filtres);
+        ArrayList<Product> results = ProductManager.searchProducts(productName, filtres);
         if (results.size() == 0) {
             System.out.println("No results found");
         } else {

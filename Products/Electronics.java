@@ -19,7 +19,7 @@ public class Electronics extends Product {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the specifications of the product: (separate by space)");
         String[] Specs = sc.nextLine().split(" ");
-        sc.close();
+        ;
         setSpecs(Specs);
     }
 

@@ -2,90 +2,33 @@ package Users;
 
 import Products.*;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import Discount.Discount;
-import Interfaces.ProductRW;
 
-public class ProductManager extends User implements ProductRW {
+public class ProductManager extends User {
 
     public static HashMap<Integer, Product> products;
 
     public ProductManager() {
         super();
-        setProducts();
         permissionLevel = 1;
-        appendFileAccounts(this);
         users.put(username, this);
         System.out.println("Account Created Successfully");
-
     }
 
-    public ProductManager(String username, String name, String email, String address, String Password, int age,
-            int phoneNumber,
-            String accountCreationDate, String lastLoginDate, String isBlocked, String isLoggedIn) {
-
-        super(username, name, email, address, Password, age, phoneNumber, accountCreationDate, lastLoginDate, isBlocked,
-                isLoggedIn);
-        setProducts();
-        this.permissionLevel = 1;
-        users.put(username, this);
-        System.out.println("Account Created Successfully");
-        updateUsersLists();
-    }
-
-    // to synchronize the products list with the file
-    public void setProducts() {
-        products.clear();
-        ArrayList<String> productsArray = readFileProducts();
-        for (String product : productsArray) {
-            String[] productInfo = product.split(" , ");
-            if (productInfo[0].equals("Clothing")) {
-                String[] sizes = productInfo[7].substring(1, productInfo[7].length() - 1).split(", ");
-                String[] colors = productInfo[8].substring(1, productInfo[8].length() - 1).split(", ");
-                Clothing clothing = new Clothing(Integer.parseInt(productInfo[1]), productInfo[2], productInfo[3],
-                        Double.parseDouble(productInfo[4]), Integer.parseInt(productInfo[5]), productInfo[6], sizes,
-                        colors);
-                products.put(clothing.getId(), clothing);
-            } else if (productInfo[0].equals("Electronics")) {
-                String[] specs = productInfo[7].substring(1, productInfo[7].length() - 1).split(", ");
-                Electronics electronics = new Electronics(Integer.parseInt(productInfo[1]), productInfo[2],
-                        productInfo[3], Double.parseDouble(productInfo[4]), Integer.parseInt(productInfo[5]),
-                        productInfo[6], specs);
-                products.put(electronics.getId(), electronics);
-            } else if (productInfo[0].equals("Books")) {
-                String author = productInfo[7];
-                String publisher = productInfo[8];
-                String[] genres = productInfo[9].substring(1, productInfo[9].length() - 1).split(", ");
-                Books books = new Books(Integer.parseInt(productInfo[1]), productInfo[2], productInfo[3],
-                        Double.parseDouble(productInfo[4]), Integer.parseInt(productInfo[5]), productInfo[6], author,
-                        publisher, genres);
-                products.put(books.getId(), books);
-            } else if (productInfo[0].equals("SportsAndOutDoor")) {
-                String type, brand, material, weight, sportType;
-                type = productInfo[7];
-                brand = productInfo[8];
-                material = productInfo[9];
-                weight = productInfo[10];
-                sportType = productInfo[11];
-                SportsAndOutDoor sportsAndOutDoor = new SportsAndOutDoor(Integer.parseInt(productInfo[1]),
-                        productInfo[2], productInfo[3], Double.parseDouble(productInfo[4]),
-                        Integer.parseInt(productInfo[5]), productInfo[6], type, brand, material, weight, sportType);
-                products.put(sportsAndOutDoor.getId(), sportsAndOutDoor);
-            }
-        }
+    // add parameterized constructor
+    public ProductManager(String name, String email, String address, String username, int age, int phoneNumber,
+            String password) {
+        super(name, email, address, username, age, phoneNumber, password);
+        permissionLevel = 1;
     }
 
     // method to add a product to the list
     public void addProducts() {
-        setProducts();
         Product product;
         int choix = 0;
         while (choix != 5) {
@@ -95,25 +38,24 @@ public class ProductManager extends User implements ProductRW {
             System.out.println("3- Books");
             System.out.println("4- SportsAndOutdoor");
             System.out.println("5- Exit");
+            Scanner sc = new Scanner(System.in);
+            choix = sc.nextInt();
+            sc.nextLine();
             switch (choix) {
                 case 1:
                     product = new Clothing();
-                    appendFileProducts(product);
                     products.put(product.getId(), product);
                     break;
                 case 2:
                     product = new Electronics();
-                    appendFileProducts(product);
                     products.put(product.getId(), product);
                     break;
                 case 3:
                     product = new Books();
-                    appendFileProducts(product);
                     products.put(product.getId(), product);
                     break;
                 case 4:
                     product = new SportsAndOutDoor();
-                    appendFileProducts(product);
                     products.put(product.getId(), product);
                     break;
                 case 5:
@@ -128,7 +70,7 @@ public class ProductManager extends User implements ProductRW {
 
     // method to check if a product exists
     public boolean existProduct(int id) {
-        setProducts();
+
         return products.containsKey(id);
     }
 
@@ -155,27 +97,29 @@ public class ProductManager extends User implements ProductRW {
     }
 
     public void removeProduct() {
-        setProducts();
+
         System.out.println(
                 "Enter the product id you want to remove : ");
         Scanner sc = new Scanner(System.in);
         int productId = sc.nextInt();
-        sc.close();
+        sc.nextLine();
+        ;
         if (!existProduct(productId)) {
             System.out.println("Product does not exist");
             return;
         }
         products.remove(productId);
-        updateProductsLists();
+
     }
 
-    protected void updateProduct() {
-        setProducts();
+    public void updateProduct() {
+
         System.out.println(
                 "Enter the id of product you want to update : ");
         Scanner sc = new Scanner(System.in);
         int prodId = sc.nextInt();
-        sc.close();
+        sc.nextLine();
+        ;
         if (!existProduct(prodId)) {
             System.out.println("Product does not exist");
             return;
@@ -190,6 +134,8 @@ public class ProductManager extends User implements ProductRW {
             System.out.println("4- Stock Quantity");
             System.out.println("5- Image URL");
             System.out.println("6- Exit");
+            choix = sc.nextInt();
+            sc.nextLine();
             switch (choix) {
                 case 1:
                     System.out.println("Enter the new name : ");
@@ -209,6 +155,7 @@ public class ProductManager extends User implements ProductRW {
                 case 4:
                     System.out.println("Enter the new stock quantity : ");
                     int stockQuantity = sc.nextInt();
+                    sc.nextLine();
                     product.setStockQuantity(stockQuantity);
                     break;
                 case 5:
@@ -224,35 +171,19 @@ public class ProductManager extends User implements ProductRW {
             }
         }
         System.out.println("Product updated successfully");
-        if (choix < 6) {
-            updateProductsLists();
-        }
 
     }
 
-    protected static void updateProductsLists() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(ProductRW.fileProducts));
-            for (Product product : products.values()) {
-                writer.write(product.toString());
-                writer.newLine();
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void printProducts() {
+    public static void printProducts() {
         System.out.println("Products : ");
-        setProducts();
+
         for (Product product : products.values()) {
             System.out.println(product.toString());
         }
     }
 
-    public static List<Product> searchProducts(String searchTerm, Map<String, Object> filters) {
-        List<Product> results = new ArrayList<>();
+    public static ArrayList<Product> searchProducts(String searchTerm, Map<String, Object> filters) {
+        ArrayList<Product> results = new ArrayList<>();
 
         for (Product product : products.values()) {
             // Check if the product name contains the search term
@@ -268,7 +199,7 @@ public class ProductManager extends User implements ProductRW {
                     switch (filterField) {
                         case "price":
                             double price = product.getPrice();
-                            double[] priceRange = (double[]) filterValue;
+                            Double[] priceRange = (Double[]) filterValue;
                             if (price < priceRange[0] && priceRange[0] != 0
                                     || price > priceRange[1] && priceRange[1] != 0) {
                                 match = false;
@@ -306,7 +237,7 @@ public class ProductManager extends User implements ProductRW {
         }
         Product product = products.get(id);
         product.setStockQuantity(product.getStockQuantity() + quantity);
-        updateProductsLists();
+
     }
 
     public void addDiscount() {
@@ -317,7 +248,7 @@ public class ProductManager extends User implements ProductRW {
         double percentage = sc.nextDouble();
         System.out.println("Enter discount expiry date: ");
         String expiryDate = sc.next();
-        sc.close();
+        ;
         Discount.addDiscount(code, percentage, expiryDate);
     }
 
@@ -325,7 +256,7 @@ public class ProductManager extends User implements ProductRW {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
-        sc.close();
+        ;
         Discount.removeDiscount(code);
     }
 
@@ -337,7 +268,7 @@ public class ProductManager extends User implements ProductRW {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
-        sc.close();
+        ;
         Discount discount = Discount.getDiscount(code);
         if (discount == null) {
             System.out.println("Discount not found");

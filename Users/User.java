@@ -1,10 +1,5 @@
 package Users;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,18 +9,20 @@ import java.util.Scanner;
 
 import Exceptions.WrongPasswordException;
 import Interfaces.AccountRW;
+import Products.Product;
 import Security.HashPasswords;
+import Utility.DateFormat;
 
 public abstract class User implements AccountRW {
-    protected static int idCounter = 0;
     protected String name, email, address, username;
     protected int age, phoneNumber;
-    protected Date accountCreationDate, lastLoginDate;
+    protected DateFormat accountCreationDate, lastLoginDate;
     protected boolean isBlocked, isLoggedIn;
     protected HashPasswords Password;
     protected int permissionLevel = 2;
-    protected static ArrayList<String> users;
+    protected static HashMap<String, User> users;
 
+    // constructor for the user class
     public User() {
         setUsers();
         Scanner sc = new Scanner(System.in);
@@ -64,94 +61,97 @@ public abstract class User implements AccountRW {
         }
         setPassword(Password);
         sc.close();
-        this.accountCreationDate = new Date();
+        Date date = new Date();
+        this.accountCreationDate = new DateFormat(date);
+        this.lastLoginDate = new DateFormat(date);
         setBlocked(false);
-
-        String res = this.name + " , " + this.email + " , " + this.Password + " , " + this.address + " , "
-                + this.username + " , " + this.age + " , "
-                + this.phoneNumber + " , " + this.accountCreationDate + " , " + this.accountCreationDate + " , "
-                + "false" + " , "
-                + this.isLoggedIn + " , " + this.permissionLevel;
-        writefile(res, AccountRW.fileAccounts);
-        users.add(res);
-        System.out.println("Account Created Successfully");
-        login(Password);
+        setIsLoggedIn(false);
     }
 
+    // second constructor for the user class
+    public User(String username, String name, String email, String address, String Password, int age,
+            int phoneNumber,
+            String accountCreationDate, String lastLoginDate, String isBlocked, String isLoggedIn) {
+        setUsername(username);
+        setName(name);
+        setEmail(email);
+        setAddress(address);
+        setPassword(Password);
+        setAge(age);
+        setPhoneNumber(phoneNumber);
+        this.accountCreationDate = new DateFormat(accountCreationDate);
+        this.lastLoginDate = new DateFormat(lastLoginDate);
+        if (isBlocked.equals("true")) {
+            setBlocked(true);
+        } else {
+            setBlocked(false);
+        }
+        if (isLoggedIn.equals("true")) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }
+
+    // to write the users in the file
     public void updateUsersLists() {
-        if (permissionLevel > 0) {
-            System.out.println("You do not have permission to update users lists.");
-        }
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(AccountRW.fileAccounts));
-            for (String user : users) {
-                writer.write(user);
-                writer.newLine();
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        writeFileAccounts(users);
     }
 
+    // to check if the user existUsers or not by checking the username
     public boolean existUser(String username) {
         setUsers();
-        for (String user : users) {
-            String[] userInformation = user.split(" , ");
-            if (userInformation[4].equals(username)) {
+        for (User user : users.values()) {
+            if (user.getUsername().equals(username)) {
                 return true;
             }
         }
         return false;
     }
 
-    public ArrayList<String> readfile(String fString) {
-        String line;
-        ArrayList<String> res = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fString));
-            while ((line = reader.readLine()) != null) {
-                res.add(line);
-            }
-            reader.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return res;
+    // an override for the toString method
+    public String toString() {
+        return this.username + " , " + this.permissionLevel + " , " + this.name + " , " + this.email + " , "
+                + this.Password + " , " + this.address
+                + " , " + this.age + " , "
+                + this.phoneNumber + " , " + this.accountCreationDate.getSDate() + " , " + this.lastLoginDate.getSDate()
+                + " , "
+                + this.isBlocked + " , "
+                + this.isLoggedIn;
     }
 
-    public void writefile(String s, String fString) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fString, true));
-            writer.write(s);
-            writer.newLine();
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
+    // to synchronize the users in the file with the users in the program
     protected void setUsers() {
-        users = readfile(AccountRW.fileAccounts);
+        ArrayList<String> usersList = readfileAccounts();
+        users.clear();
+        for (String user : usersList) {
+            String[] userInformation = user.split(" , ");
+            if (userInformation[1].equals("0")) {
+                users.put(userInformation[0],
+                        new Admin(userInformation[0], userInformation[2], userInformation[3], userInformation[5],
+                                userInformation[4], Integer.parseInt(userInformation[6]),
+                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
+                                userInformation[10], userInformation[11]));
+            } else if (userInformation[1].equals("2")) {
+                users.put(userInformation[0],
+                        new Customer(userInformation[0], userInformation[2], userInformation[3], userInformation[5],
+                                userInformation[4], Integer.parseInt(userInformation[6]),
+                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
+                                userInformation[10], userInformation[11]));
+            } else if (userInformation[1].equals("3")) {
+                users.put(userInformation[0],
+                        new ProductManager(userInformation[0], userInformation[2], userInformation[3],
+                                userInformation[5],
+                                userInformation[4], Integer.parseInt(userInformation[6]),
+                                Integer.parseInt(userInformation[7]), userInformation[8], userInformation[9],
+                                userInformation[10], userInformation[11]));
+            }
+        }
     }
 
+    // login function
     public void login(String Password) {
         setUsers();
-        for (String user : users) {
-            String[] userInformation = user.split(" , ");
-            if (userInformation[4].equals(this.username)) {
-                if (userInformation[9].equals("true")) {
-                    this.isBlocked = true;
-                } else {
-                    this.isBlocked = false;
-                }
-                if (userInformation[10].equals("true")) {
-                    this.isLoggedIn = true;
-                } else {
-                    this.isLoggedIn = false;
-                }
-            }
-        }
         if (this.isBlocked == true) {
             System.out.println("Your account is blocked. Please contact an admin to unblock it.");
             return;
@@ -163,7 +163,9 @@ public abstract class User implements AccountRW {
         try {
             if (this.Password.verifyPassword(Password)) {
                 this.isLoggedIn = true;
-                setLastLoginDate(new Date());
+                setLastLoginDate(new DateFormat(new Date()));
+                users.put(this.username, this);
+                updateUsersLists();
                 System.out.println("You are now logged in. Welcome " + this.name + "!");
             } else {
                 throw new WrongPasswordException();
@@ -173,18 +175,25 @@ public abstract class User implements AccountRW {
         }
     }
 
+    // logout function
     public void logout() {
         if (this.isLoggedIn == false) {
             System.out.println("You are already logged out.");
         } else {
             this.isLoggedIn = false;
+            users.put(this.username, this);
+            updateUsersLists();
         }
     }
 
+    // change password function
     public void changePassword(String oldPassword, String newPassword) {
+        setUsers();
         try {
             if (this.Password.verifyPassword(oldPassword)) {
                 this.Password = new HashPasswords(newPassword);
+                users.put(this.username, this);
+                updateUsersLists();
             } else {
                 throw new WrongPasswordException();
             }
@@ -193,6 +202,45 @@ public abstract class User implements AccountRW {
         }
     }
 
+    /**
+     * this method to search for a product (using filters)
+     */
+    public void searchProduct() {
+        // i am going to use the method searchProducts from ProductManager
+        // ask the user to give the information about the product he wants to search
+        // then call the method searchProducts from ProductManager
+        System.out.println("Enter the name of the product you want to search : ");
+        Scanner sc = new Scanner(System.in);
+        String productName = sc.nextLine();
+        System.out.println("Enter the quantity of the product you want to search : (0 to ignore quantity)");
+        int quantity = sc.nextInt();
+        System.out.println(
+                "Enter the min and max price of the product you want to search : (to search for a particular price enter the same min and max and if there is no min or max enter 0 for the non desired value)");
+        System.out.println("Min price : ");
+        double minPrice = sc.nextDouble();
+        System.out.println("Max price : ");
+        double maxPrice = sc.nextDouble();
+        sc.close();
+        if (minPrice > maxPrice) {
+            System.out.println("Invalid input");
+            return;
+        }
+        Map<String, Object> filtres = new HashMap<>();
+        filtres.put("price", new Double[] { minPrice, maxPrice });
+        filtres.put("quantity", quantity);
+
+        List<Product> results = ProductManager.searchProducts(productName, filtres);
+        if (results.size() == 0) {
+            System.out.println("No results found");
+        } else {
+            System.out.println("Results : ");
+            for (Product result : results) {
+                System.out.println(result.toString());
+            }
+        }
+    }
+
+    // getters
     protected String getName() {
         return name;
     }
@@ -221,11 +269,11 @@ public abstract class User implements AccountRW {
         return phoneNumber;
     }
 
-    protected Date getAccountCreationDate() {
+    protected DateFormat getAccountCreationDate() {
         return accountCreationDate;
     }
 
-    protected Date getLastLoginDate() {
+    protected DateFormat getLastLoginDate() {
         return lastLoginDate;
     }
 
@@ -237,6 +285,23 @@ public abstract class User implements AccountRW {
         return isLoggedIn;
     }
 
+    public int getPhoneNumber() {
+        return this.phoneNumber;
+    };
+
+    public boolean getIsBlocked() {
+        return this.isBlocked;
+    };
+
+    public boolean getIsLoggedIn() {
+        return this.isLoggedIn;
+    }
+
+    public int getPermissionLevel() {
+        return this.permissionLevel;
+    };
+
+    // setters
     protected void setName(String name) {
         if (name.length() < 3) {
             throw new IllegalArgumentException("Name must be at least 3 characters long.");
@@ -276,8 +341,8 @@ public abstract class User implements AccountRW {
         return str.matches("\\d+");
     }
 
-    protected void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
+    protected void setLastLoginDate(DateFormat dateFormat) {
+        this.lastLoginDate = dateFormat;
     }
 
     protected void setBlocked(boolean blocked) {
@@ -298,38 +363,8 @@ public abstract class User implements AccountRW {
         this.username = username;
     };
 
-    public void searchProduct() {
-        // i am going to use the method searchProducts from ProductManager
-        // ask the user to give the information about the product he wants to search
-        // then call the method searchProducts from ProductManager
-        System.out.println("Enter the name of the product you want to search : ");
-        Scanner sc = new Scanner(System.in);
-        String productName = sc.nextLine();
-        System.out.println("Enter the quantity of the product you want to search : (0 to ignore quantity)");
-        int quantity = sc.nextInt();
-        System.out.println(
-                "Enter the min and max price of the product you want to search : (to search for a particular price enter the same min and max and if there is no min or max enter 0 for the non desired value)");
-        System.out.println("Min price : ");
-        double minPrice = sc.nextDouble();
-        System.out.println("Max price : ");
-        double maxPrice = sc.nextDouble();
-        sc.close();
-        if (minPrice > maxPrice) {
-            System.out.println("Invalid input");
-            return;
-        }
-        Map<String, Object> filtres = new HashMap<>();
-        filtres.put("price", new Double[] { minPrice, maxPrice });
-        filtres.put("quantity", quantity);
+    protected void setIsLoggedIn(boolean isLoggedIn) {
+        this.isLoggedIn = isLoggedIn;
+    }
 
-        List<String> results = ProductManager.searchProducts(productName, filtres);
-        if (results.size() == 0) {
-            System.out.println("No results found");
-        } else {
-            System.out.println("Results : ");
-            for (String result : results) {
-                System.out.println(result);
-            }
-        }
-    };
 }

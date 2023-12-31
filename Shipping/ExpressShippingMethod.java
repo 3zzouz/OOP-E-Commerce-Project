@@ -2,7 +2,11 @@ package Shipping;
 
 import Orders.Order;
 
+/**
+ * Represents an express shipping method for an order.
+ */
 public class ExpressShippingMethod extends ShippingMethod {
+    // default constructor
     public ExpressShippingMethod() {
         super("Express Shipping");
     }

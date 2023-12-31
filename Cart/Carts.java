@@ -1,119 +1,139 @@
 package Cart;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
+import Products.Product;
 import Users.Customer;
 import Users.ProductManager;
 
-public class Carts {
-    private ArrayList<String> productsName;
-    private ArrayList<Integer> quantities;
-    private ArrayList<Double> prices;
+/**
+ * The Carts class represents a shopping cart for a customer in an e-commerce
+ * system.
+ * It allows adding and removing products, calculating the total price, and
+ * displaying the cart contents.
+ */
+public class Carts implements Cloneable {
+    private HashMap<Integer, Product> products;
+    Customer customer;
     private double totalPrice;
 
+    // Constructor
     public Carts(Customer customer) {
-        productsName = new ArrayList<>();
-        quantities = new ArrayList<>();
-        prices = new ArrayList<>();
+        products = new HashMap<Integer, Product>();
         totalPrice = 0;
+        this.customer = customer;
+        customer.setCart(this);
     }
 
-    public boolean existsProduct(String productName) {
-        int index = productsName.indexOf(productName);
-        if (index == -1) {
-            System.out.println("Product not in cart");
-            return false;
-        }
-        System.out.println("Product in cart");
-        return true;
+    // verifies if a product exists in the cart or not
+    public boolean existsProduct(int productId) {
+        return products.containsKey(productId);
     }
 
-    public void addProduct(String productName, int quantity) {
+    // add a product to the cart ( if it exists, it will update the quantity and the
+    // total price)
+    // if the quantity is greater than the stock quantity, it will not be added
+    // if the product doesn't exist in the chart, it (a clone of the object) will be
+    // added to the cart
+    // if the quantity is negative, it will not be added
+    // if the product ID doesn't exist among products in the inventory, it will not
+    // be added
+    public void addProduct(int prodID, int quantity) {
         if (quantity <= 0) {
             System.out.println("Quantity must be positive");
             return;
         }
+        if (quantity > ProductManager.getProductStockQuantity(prodID)) {
+            System.out.println("Not enough quantity in stock");
+            return;
+        }
+        if (!ProductManager.products.containsKey(prodID)) {
+            System.out.println("Product ID doesn't exist");
+            return;
+        }
         double price;
-        if (existsProduct(productName)) {
-            for (int i = 0; i < quantity; i++)
-                incrementQuantity(productName);
-            price = prices.get(productsName.indexOf(productName));
+        if (existsProduct(prodID)) {
+            Product product = products.get(prodID);
+            int oldQuantity = product.getStockQuantity();
+            if (oldQuantity + quantity > ProductManager.getProductStockQuantity(prodID)) {
+                System.out.println("Not enough quantity in stock");
+                return;
+            }
+            product.setStockQuantity(oldQuantity + quantity);
+            products.put(prodID, product);
+            price = product.getPrice();
         } else {
-            productsName.add(productName);
-            quantities.add(quantity);
-            price = ProductManager.getProductPrice(productName);
-            prices.add(price * quantity);
+            Product product = ProductManager.getProduct(prodID).clone();
+            product.setStockQuantity(quantity);
+            products.put(prodID, product);
+            price = product.getPrice();
         }
         totalPrice = totalPrice + price * quantity;
     }
 
-    public void removeProduct(String productName) {
-        int index = productsName.indexOf(productName);
-        if (index == -1) {
+    // remove a product from the cart if it exists already
+    public void removeProduct(int id) {
+        if (!existsProduct(id)) {
             System.out.println("Product not in cart");
             return;
         }
-        productsName.remove(index);
-        quantities.remove(index);
-        prices.remove(index);
+        Product product = products.get(id);
+        double price = product.getPrice();
+        int quantity = product.getStockQuantity();
+        totalPrice = totalPrice - price * quantity;
+        products.remove(id);
     }
 
+    // to empty the cart after successful checkout
     public void emptyCart() {
-        productsName.clear();
-        quantities.clear();
-        prices.clear();
+        products.clear();
         totalPrice = 0;
     }
 
-    public void incrementQuantity(String productName) {
-        int index = productsName.indexOf(productName);
-        if (index == -1) {
-            System.out.println("Product not in cart");
-            return;
+    // to display the cart contents
+    public String toString() {
+        if (products.isEmpty()) {
+            System.out.println("Cart is empty");
+            return null;
         }
-        int oldQuantity = quantities.get(index);
-        double uPrice = prices.get(index) / oldQuantity;
-        double price = uPrice * (oldQuantity + 1);
-        quantities.set(index, oldQuantity + 1);
-        prices.set(index, price);
-        totalPrice = totalPrice + uPrice;
+        String result = "";
+        for (Product product : products.values()) {
+            result += product.toString() + "//";
+        }
+        return result + " , " + totalPrice;
+    }
+    // TODO : i should complete two methods one to transform a customer to a string and vice versa
+    public static Carts fromStringToCart(String cartString, Customer custom) {
+        String[] products = cartString.split("//");
+        Carts cart = new Carts(custom);
+        for (String product : products) {
+            String[] productInfo = product.split(",");
+            int id = Integer.parseInt(productInfo[0]);
+            int quantity = Integer.parseInt(productInfo[1]);
+            cart.addProduct(id, quantity);
+        }
+        return cart;
     }
 
-    public void decrementQuantity(String productName) {
-        int index = productsName.indexOf(productName);
-        if (index == -1) {
-            System.out.println("Product not in cart");
-            return;
-        }
-        int oldQuantity = quantities.get(index);
-        if (oldQuantity == 1) {
-            removeProduct(productName);
-            return;
-        }
-        double uPrice = prices.get(index) / oldQuantity;
-        double price = uPrice * (oldQuantity - 1);
-        quantities.set(index, oldQuantity - 1);
-        prices.set(index, price);
-        totalPrice = totalPrice - uPrice;
-    }
-
+    // to verify if the cart is empty or not
     public boolean isChartEmpty() {
-        return productsName.isEmpty();
+        return products.isEmpty();
     }
 
-    public ArrayList<String> getProductsName() {
-        return productsName;
+    // to return the products in the cart
+    public HashMap<Integer, Product> getProducts() {
+        return this.products;
     }
 
-    public ArrayList<Integer> getQuantities() {
-        return quantities;
-    }
-
-    public ArrayList<Double> getPrices() {
-        return prices;
-    }
-
+    // to calculate the total price of the products in the cart (without
+    // discount)(useful for the checkout)
     public double getTotalPrice() {
         return totalPrice;
     }
+
+    // setter for the total price
+    public void setTotalPrice(double price) {
+        totalPrice = price;
+    }
+
 }

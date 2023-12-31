@@ -1,11 +1,8 @@
 package Users;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import Cart.Carts;
@@ -15,31 +12,52 @@ import PaymentMethod.PaymentMethod;
 import PaymentMethod.Paypal;
 
 public class Customer extends User {
-    private ArrayList<Order> orders;
+    private HashMap<String, Order> orders;
     private Carts cart;
     private PaymentMethod[] paymentMethods;
     private PaymentMethod preferredPaymentMethod;
     private int[] occurenceCounter = new int[2];
 
     Customer() {
-        this.orders = new ArrayList<>();
+        super();
+        this.orders = new HashMap<>();
         this.paymentMethods = new PaymentMethod[2];
-        this.permissionLevel = 0;
+        this.permissionLevel = 2;
+        appendFileAccounts(this);
+        users.put(username, this);
+        System.out.println("Account Created Successfully");
         updateCustomersInformation();
     }
 
-    public void updateCustomersInformation() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./Data/Customers.csv", true));
-            writer.write(this.username + " , " + paymentMethods[0].toString() + " , "
-                    + paymentMethods[1].toString() + " , " + preferredPaymentMethod.toString() + " , "
-                    + occurenceCounter[0] + " , " + occurenceCounter[1] + " , " + orders.toString());
+    protected Customer(String username, String name, String email, String address, String Password, int age,
+            int phoneNumber, String accountCreationDate, String lastLoginDate, String isBlocked,
+            String isLoggedIn) {
 
-            writer.newLine();
-            writer.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        super(username, name, email, address, Password, age, phoneNumber, accountCreationDate, lastLoginDate, isBlocked,
+                isLoggedIn);
+        this.orders = new HashMap<>();
+        this.paymentMethods = new PaymentMethod[2];
+        this.permissionLevel = 2;
+        updateCustomersInformation();
+
+    }
+
+    public String toString() {
+        return super.toString() + " , " + paymentMethods[0].toString() + " , "
+                + paymentMethods[1].toString() + " , " + preferredPaymentMethod.toString() + " , "
+                + occurenceCounter[0] + " , " + occurenceCounter[1];
+    }
+
+    public String toStringOrders() {
+        String s = "";
+        for (Order order : orders.values()) {
+            s += order.toString() + "//";
         }
+        return s;
+    }
+
+    public void updateCustomersInformation() {
+        writeFileAccounts(users);
     }
 
     // supposed that there are 0 to 2 payment methods per Customer
@@ -122,11 +140,11 @@ public class Customer extends User {
         }
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter product name: ");
-        String productName = sc.nextLine();
+        int productID = sc.nextInt();
         System.out.println("Enter quantity: ");
         int quantity = sc.nextInt();
         sc.close();
-        cart.addProduct(productName, quantity);
+        cart.addProduct(productID, quantity);
     }
 
     public void removeProductFromCart() {
@@ -135,10 +153,10 @@ public class Customer extends User {
             return;
         }
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter product name: ");
-        String productName = sc.nextLine();
+        System.out.println("Enter product id to remove : ");
+        int productid = sc.nextInt();
         sc.close();
-        cart.removeProduct(productName);
+        cart.removeProduct(productid);
     }
 
     public void clearCart() {
@@ -164,7 +182,7 @@ public class Customer extends User {
             return;
         }
         Order order = new Order(this);
-        orders.add(order);
+        orders.put(order.getOrderID(), order);
     }
 
     public void incrementOccurenceCounter(int index) {
@@ -178,6 +196,10 @@ public class Customer extends User {
         if (index > 1)
             throw new IndexOutOfBoundsException();
         return paymentMethods[index];
+    }
+
+    public void setCart(Carts carts) {
+        this.cart = carts;
     }
 
 }

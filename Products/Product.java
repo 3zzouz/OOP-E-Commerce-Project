@@ -1,8 +1,12 @@
 package Products;
 
-
 import java.util.Scanner;
 
+/**
+ * The abstract class Product represents a generic product in an e-commerce
+ * system.
+ * It provides common attributes and methods that all products should have.
+ */
 public abstract class Product {
     protected static int idCounter = 0;
     protected int id;
@@ -12,6 +16,7 @@ public abstract class Product {
     protected int stockQuantity;
     protected String imageUrl;
 
+    // default constructor
     public Product() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter product name: ");
@@ -33,8 +38,23 @@ public abstract class Product {
         setId(idCounter++);
     }
 
-    public abstract String toString();
+    // parameterized constructor
+    public Product(int id, String name, String description, double price, int stockQuantity, String imageUrl) {
+        setName(name);
+        setDescription(description);
+        setPrice(price);
+        setStockQuantity(stockQuantity);
+        setImageUrl(imageUrl);
+        setId(id);
+    }
 
+    // override toString method
+    public String toString() {
+        return this.id + " , " + this.name + " , " + this.description + " , " + this.price + " , " + this.stockQuantity
+                + " , " + this.imageUrl;
+    }
+
+    // setters
     public void setName(String name) {
         this.name = name;
     }
@@ -43,19 +63,19 @@ public abstract class Product {
         this.description = description;
     }
 
-    protected void setPrice(double price) {
+    public void setPrice(double price) {
         if (price < 0)
             throw new IllegalArgumentException("Price cannot be negative");
         this.price = price;
     }
 
-    protected void setStockQuantity(int stockQuantity) {
+    public void setStockQuantity(int stockQuantity) {
         if (stockQuantity < 0)
             throw new IllegalArgumentException("Stock quantity cannot be negative");
         this.stockQuantity = stockQuantity;
     }
 
-    protected void setImageUrl(String imageUrl) {
+    public void setImageUrl(String imageUrl) {
         if (imageUrl == null || imageUrl.isEmpty())
             throw new IllegalArgumentException("Image URL cannot be empty");
         this.imageUrl = imageUrl;
@@ -65,7 +85,8 @@ public abstract class Product {
         this.id = id;
     }
 
-    protected String getName() {
+    // getters
+    public String getName() {
         return this.name;
     }
 
@@ -73,11 +94,11 @@ public abstract class Product {
         return this.description;
     }
 
-    protected double getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
-    protected int getStockQuantity() {
+    public int getStockQuantity() {
         return this.stockQuantity;
     }
 
@@ -85,11 +106,14 @@ public abstract class Product {
         return this.imageUrl;
     }
 
-    protected int getId() {
+    public int getId() {
         return this.id;
     }
 
     public static int getCounter() {
         return idCounter;
     }
+
+    // abstract method to ensure that all products have a clone method
+    public abstract Product clone();
 }

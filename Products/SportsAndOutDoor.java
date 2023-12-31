@@ -2,9 +2,15 @@ package Products;
 
 import java.util.Scanner;
 
+/**
+ * The SportsAndOutDoor class represents a sports and outdoor product.
+ * It extends the Product class and provides additional attributes and methods
+ * specific to sports and outdoor products.
+ */
 public class SportsAndOutDoor extends Product {
     protected String type, brand, material, weight, sportType;
 
+    // default constructor
     public SportsAndOutDoor() {
         System.out.println("Enter the type of the product: ");
         Scanner sc = new Scanner(System.in);
@@ -25,13 +31,25 @@ public class SportsAndOutDoor extends Product {
         setSportType(sportType);
     }
 
+    // parameterized constructor
+    public SportsAndOutDoor(int id, String name, String description, double price, int stockQuantity, String imageUrl,
+            String type, String brand, String material, String weight, String sportType) {
+        super(id, name, description, price, stockQuantity, imageUrl);
+        setType(type);
+        setBrand(brand);
+        setMaterial(material);
+        setWeight(weight);
+        setSportType(sportType);
+    }
+
+    // toString method
     public String toString() {
-        return this.id + " , " + this.name + " , " + this.description + " , " + this.price + " , " + this.stockQuantity
-                + " , "
-                + this.imageUrl + " , " + this.type + " , " + this.brand + " , " + this.material + " , " + this.weight
+        return "SportsAndOutDoor , " + this.toString() + " , " + this.type + " , " + this.brand + " , " + this.material
+                + " , " + this.weight
                 + " , " + this.sportType;
     }
 
+    // setters
     protected void setType(String type) {
         if (type == null || type.isEmpty())
             throw new IllegalArgumentException("Type cannot be empty");
@@ -62,6 +80,7 @@ public class SportsAndOutDoor extends Product {
         this.sportType = sportType;
     }
 
+    // getters
     protected String getType() {
         return this.type;
     }
@@ -80,6 +99,14 @@ public class SportsAndOutDoor extends Product {
 
     protected String getSportType() {
         return this.sportType;
+    }
+
+    // clone method
+    public SportsAndOutDoor clone() {
+        SportsAndOutDoor sportsAndOutDoor = new SportsAndOutDoor(this.id, this.name, this.description, this.price,
+                this.stockQuantity, this.imageUrl,
+                this.type, this.brand, this.material, this.weight, this.sportType);
+        return sportsAndOutDoor;
     }
 
 }

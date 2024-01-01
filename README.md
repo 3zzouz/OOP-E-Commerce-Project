@@ -72,32 +72,63 @@ The code is organized into several classes for better readability.
 
 - `CreditCard`: Represents a bank card with a number, a balance ,a CVV, an expiry date and card holders name.
 - `Paypal`: Represents a paypal account (email + password) and also a balance.
--`PaymentMethod`
-- `Produit`: Represents a product with a name, a category, a price, and a customer satisfaction rate.
-- `Panier`: Manages the products added to the cart by the client.
+- `PaymentMethod`:Represents the abstract super class of `Paypal` and `CreditCard`
+- `Product`: Represents an abstract class with a name,an id, a description, a price, and a stockQuantity and an ImageURL .
+- `Clothing` : Represents a subclass of `Product` having array of sizes and colors
+- `Books` : Represents a subclass of `Product` having array of genres and an author and a publisher
+- `Electronics`:Represents a subclass of `Product` having array of specs
+- `SportsAndOutDoor`:Represents a subclass of `Product` having a type, brand, material, weight and a sportType
+- `Cart`: Manages the products added to the cart by the client and having totalPrice representing the total amount to pay and every cart is specefic to one and only customer.
+- `Discount`: Manages the list of discounts that reduce the cost of orders
+
+- Exceptions:
+
+  - `NotEnoughMoneyException`:Representing the error that occurs when you try to pay with a payment method that doesn't have enough balance
+  - `WrongPasswordException`:Representing the error that occurs when you enter the wrong password in the login section
+
+- `Order`:Represents an order made by a customer. This class handles the order process, including calculating the total price,applying discounts, setting the order ID, canceling the order, shipping the order, and simulating the checkout process. The order status can be one of the following: "Pending", "Processing","Shipped", "Delivered", or "Canceled". The order ID is generated based on the customer's username and a unique counter. The total price of the order is calculated by summing the prices of the products in the customer's cart and adding the shipping cost.The order can be canceled within 72 hours of placing the order. The order can be shipped, which changes the order status to "Shipped". The order can be paid, which reduces the customer's balance and updates the preferred payment method. Notifications can be pushed to the product manager when a product is running out of stock.
+
 - `InfoLivraison`: Contains information about the delivery, such as the order number, address, price, duration, and method.
 - `Commande`: Represents an order with a number, an associated client, an address, a date, products, a status, and a total price.
-- `Utilisateur`: Base class for users with common properties such as username, password, email, etc.
-- `Administrateur`: Subclass of `Utilisateur` specific to administrators.
-- `Client`: Subclass of `Utilisateur` specific to clients with additional features like the cart, orders, etc.
-- `App`: Contains the business logic of the application, including the management of clients, stock, and main features.
+
+- `HashPassword`:The HashPasswords class is responsible for hashing and verifying passwords using the SHA-512 algorithm so when an admin views the users it doesn't view the password of the other accounts.
+
+- Utility: -`DateFormat`: The DateFormat class provides methods to convert between Date objects and formatted date strings.
+- Shipping :
+
+  - `ShippingMethod` : The abstract class representing a shipping method. -`StandardShipping` :The StandardShipping class represents a standard shipping method for an order. It extends the ShippingMethod class and provides a default constructor and a method to calculate the shipping cost. -`ExpressShippingMethod` : Represents an express shipping method for an order.
+
+- `User`: The abstract user class represents a user in the e-commerce system. It provides methods for user registration, login, logout, and password management.Users can search for products using filters.
+- `ProductManager`:The ProductManager class represents a user with the role of a product manager in an e-commerce system. It extends the User class and provides functionality to manage products,including adding, removing, updating,and searching for products. It also allows the product manager to manage discounts for products.
+
+- `Customer`: Represents a customer in the e-commerce system inherits from the User class.
+
+- `Admin`:The Admin class represents an administrator in the e-commerce system. It extends the ProductManager class and provides additional functionalities for managing users and their permissions.
+
+- `App`: Contains the business logic of the application, including the management of clients, stock, and all features that will be called from the main function.
+
+- `Main` : Entry point to the console application
 
 ## 5. Design Decisions:
 
 - Object-Oriented Approach: The application is designed using an object-oriented approach to encapsulate data and behaviors in classes. This makes the code modular, scalable, and easier to maintain.
 - Data Structures: HashMaps are used to store the products in stock, manage the products in the cart, and map the clients in the application. ArrayList maintains the history of the clients' orders.
-- User Authentication: User authentication is implemented using a simple HashMap where the usernames are the keys and the passwords are the values. For simplicity, passwords are stored in plain text.
+- User Authentication: User authentication is implemented using a simple HashMap where the usernames are the keys and the passwords are the values. For simplicity, passwords after being hashed are stored in plain text.
 
 ## 6. OOP Implementation:
 
-- Inheritance: The `Administrateur` and `Client` classes inherit from the `Utilisateur` class, representing a hierarchical relationship.
-- Encapsulation: Data encapsulation is achieved by making the attributes private and providing public methods to access and modify them.
+- Inheritance: The `Admin` and `Customer` and `ProductManager` classes inherit from the `User` class, representing a hierarchical relationship.
+- Encapsulation: Data encapsulation is achieved by making the attributes private and providing public methods to access and modify them which is done in many classes.
+- Polymorphism : Is achieved in this project for example in the `Admin` and `Customer` and other subclasses i have overridden methods such as toString()
+- Abstraction : Is also achieved in this project by using abstract classes such as `User` and `Product` and `PaymentMethod`
 
 ## 7. Optional Features:
 
-- Comment and Rating System: Implemented a comment and rating system for products using the `feedbackRate` attribute in the `Produit` class. Clients can rate products on a scale of 0 to 5, and the average feedback rate is calculated.
-- Multiple Delivery Options: Introduced the concept of shipping options in the `InfoLivraison` class. Clients can choose between standard, express, and urgent shipping methods, each method affecting the cost and delivery time.
+- Discounts and Promotions: Implemented a system for applying discount codes and promotions to purchases. Customers can enter a discount code at checkout to receive a percentage off their total purchase price.
+
+- Multiple Shipping Options: Introduced the concept of shipping options. Customers can choose between standard and express shipping methods, each method affecting the cost of the orders.
 
 For more information, you will find well-commented code that will guide you when reading the code and during its execution.
+For many classes and methods when you hover on them you will find all the information needed
 
-Work done by Oussema Guerami GL2/2
+Work done by Dhouibi Mohamed Aziz GL2/2

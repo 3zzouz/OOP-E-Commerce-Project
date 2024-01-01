@@ -13,9 +13,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 2. Administrator Menu:
 
-# Connection: Administrators can log in with their username and password.
+Connection: Administrators can log in with their username and password.
 
-# Features:
+Features:
 
 - View the list of clients: display the list of registered clients
 - View a user: view a user in the list of of users
@@ -31,9 +31,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 3. Customers Menu:
 
-# Connection: Clients can log in with their username and password.
+Connection: Clients can log in with their username and password.
 
-# Features:
+Features:
 
 - View all Products in the stock
 - Search for Products using filters
@@ -50,9 +50,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 3.Product Manager Menu:
 
-# Connection:Product Manager can log in with their username and password.
+Connection:Product Manager can log in with their username and password.
 
-# Features:
+Features:
 
 - View all Products in the stock
 - Search for Products using filters
@@ -88,8 +88,7 @@ The code is organized into several classes for better readability.
 
 - `Order`:Represents an order made by a customer. This class handles the order process, including calculating the total price,applying discounts, setting the order ID, canceling the order, shipping the order, and simulating the checkout process. The order status can be one of the following: "Pending", "Processing","Shipped", "Delivered", or "Canceled". The order ID is generated based on the customer's username and a unique counter. The total price of the order is calculated by summing the prices of the products in the customer's cart and adding the shipping cost.The order can be canceled within 72 hours of placing the order. The order can be shipped, which changes the order status to "Shipped". The order can be paid, which reduces the customer's balance and updates the preferred payment method. Notifications can be pushed to the product manager when a product is running out of stock.
 
-- `InfoLivraison`: Contains information about the delivery, such as the order number, address, price, duration, and method.
-- `Commande`: Represents an order with a number, an associated client, an address, a date, products, a status, and a total price.
+- `Order`: Represents an order with a number, an associated client, an address, a date, products, a status, and a total price.
 
 - `HashPassword`:The HashPasswords class is responsible for hashing and verifying passwords using the SHA-512 algorithm so when an admin views the users it doesn't view the password of the other accounts.
 

@@ -6,6 +6,11 @@ import Users.Customer;
 import Users.ProductManager;
 import Users.User;
 
+/**
+ * The App class represents the main application for the OOP E-Commerce Project.
+ * It contains methods for creating users, handling user login and logout, managing products and discounts,
+ * managing user cart and orders, and performing various administrative tasks.
+ */
 public class App {
     public User createUser() {
         System.out.println("Enter the new account type : ");

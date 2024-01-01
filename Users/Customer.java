@@ -12,6 +12,10 @@ import PaymentMethod.CreditCard;
 import PaymentMethod.PaymentMethod;
 import PaymentMethod.Paypal;
 
+/**
+ * Represents a customer in the e-commerce system.
+ * Inherits from the User class.
+ */
 public class Customer extends User {
     public HashMap<String, Order> orders;
     private Carts cart;
@@ -39,6 +43,7 @@ public class Customer extends User {
         this.occurenceCounter = new int[2];
     }
 
+    // override toString method
     public String toString() {
         return super.toString() + " , " + (paymentMethods[0] != null ? paymentMethods[0].toString() : "") + " , "
                 + (paymentMethods[1] != null ? paymentMethods[1].toString() : "") + " , "
@@ -46,6 +51,7 @@ public class Customer extends User {
                 + occurenceCounter[0] + " , " + occurenceCounter[1];
     }
 
+    // toString method for orders of the customer
     public String toStringOrders() {
         String s = "";
         for (Order order : orders.values()) {
@@ -112,17 +118,20 @@ public class Customer extends User {
         ;
     }
 
+    // method to login
     public void login(String password) throws WrongPasswordException {
         super.login(password);
         this.cart = new Carts(this);
 
     }
 
+    // method to logout
     public void logout() {
         super.logout();
         this.cart.emptyCart();
     }
 
+    // method to set preferred payment method
     public void setPreferredPaymentMethod() {
         if (occurenceCounter[0] > occurenceCounter[1]) {
             this.preferredPaymentMethod = paymentMethods[0];
@@ -131,10 +140,12 @@ public class Customer extends User {
         }
     }
 
+    // method to get preferred payment method
     public PaymentMethod getPreferredPaymentMethod() {
         return preferredPaymentMethod;
     }
 
+    // method to add product to cart
     public void addProductToCart() {
         if (!isLoggedIn) {
             System.out.println("You must be logged in to add products to cart");
@@ -150,6 +161,7 @@ public class Customer extends User {
         cart.addProduct(productID, quantity);
     }
 
+    // method to remove product from cart
     public void removeProductFromCart() {
         if (!isLoggedIn) {
             System.out.println("You must be logged in to remove products from cart");
@@ -162,6 +174,7 @@ public class Customer extends User {
         cart.removeProduct(productid);
     }
 
+    // method to clear cart
     public void clearCart() {
         if (!isLoggedIn) {
             System.out.println("You must be logged in to clear cart");
@@ -170,15 +183,18 @@ public class Customer extends User {
         cart.emptyCart();
     }
 
+    // method to get the cart
     public Carts getCart() {
 
         return cart;
     }
 
+    // to get the number of orders per customer
     public int getNumberofOrders() {
         return orders.size();
     }
 
+    // method to place order
     public void placeOrder() {
         if (!isLoggedIn) {
             System.out.println("You must be logged in to place an order");
@@ -187,6 +203,7 @@ public class Customer extends User {
         Order order = new Order(this);
     }
 
+    // to update the occurence counter (to know which payment method is preferred)
     public void incrementOccurenceCounter(int index) {
         if (index > 1) {
             throw new IndexOutOfBoundsException();
@@ -194,6 +211,7 @@ public class Customer extends User {
         occurenceCounter[index] += 1;
     };
 
+    // method to get payment method
     public PaymentMethod getPaymentMethod(int index) {
         if (index > 1)
             throw new IndexOutOfBoundsException();
@@ -206,10 +224,12 @@ public class Customer extends User {
         return paymentMethods[index];
     }
 
+    // setter for cart
     public void setCart(Carts carts) {
         this.cart = carts;
     }
 
+    // method to view payment methods
     public void viewPaymentMethods() {
         System.out.println("Payment Methods : ");
         for (PaymentMethod paymentMethod : paymentMethods) {

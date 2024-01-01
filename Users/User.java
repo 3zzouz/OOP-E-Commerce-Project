@@ -3,7 +3,6 @@ package Users;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -12,6 +11,12 @@ import Products.Product;
 import Security.HashPasswords;
 import Utility.DateFormat;
 
+/**
+ * The User class represents a user in the e-commerce system.
+ * It provides methods for user registration, login, logout, and password
+ * management.
+ * Users can search for products using filters.
+ */
 public abstract class User {
     protected String name, email, address, username;
     protected int age, phoneNumber;
@@ -122,6 +127,7 @@ public abstract class User {
         }
     }
 
+    // a static login function
     public static User login(String username, String Password) throws WrongPasswordException {
         if (!users.containsKey(username)) {
             System.out.println("User not found");
@@ -140,6 +146,7 @@ public abstract class User {
         users.put(this.username, this);
     }
 
+    // a static logout function
     public static void logout(String username) {
         if (!users.containsKey(username)) {
             System.out.println("User not found");
@@ -210,6 +217,11 @@ public abstract class User {
                 System.out.println(result.toString());
             }
         }
+    }
+
+    // used to check if the phone number is all digits or not
+    protected boolean isAllDigits(String str) {
+        return str.matches("\\d+");
     }
 
     // getters
@@ -307,10 +319,6 @@ public abstract class User {
             throw new IllegalArgumentException("Phone number must be 8 digits long.");
         }
         this.phoneNumber = phoenNumber;
-    }
-
-    protected boolean isAllDigits(String str) {
-        return str.matches("\\d+");
     }
 
     protected void setLastLoginDate(DateFormat dateFormat) {

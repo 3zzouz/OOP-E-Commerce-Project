@@ -2,7 +2,14 @@ package Users;
 
 import java.util.Scanner;
 
+/**
+ * The Admin class represents an administrator in the e-commerce system.
+ * It extends the ProductManager class and provides additional functionalities
+ * for managing users and their permissions.
+ */
 public class Admin extends ProductManager {
+
+    // constructor (default)
     public Admin() {
         super();
         this.permissionLevel = 0;
@@ -11,12 +18,14 @@ public class Admin extends ProductManager {
         System.out.println("Admin created successfully");
     }
 
+    // constructor (parameterized)
     public Admin(String name, String email, String address, String username, int age, int phoneNumber,
             String password) {
         super(name, email, address, username, age, phoneNumber, password);
         this.permissionLevel = 0;
     }
 
+    // method to view all users
     public void viewAllUsers() {
 
         System.out.println("Users : ");
@@ -25,6 +34,7 @@ public class Admin extends ProductManager {
         }
     }
 
+    // method to view particular user
     public void viewUser() {
 
         System.out.println("Enter the person's username: ");
@@ -48,6 +58,7 @@ public class Admin extends ProductManager {
         System.out.println("Permission Level: " + Integer.toString(user.getPermissionLevel()));
     }
 
+    // method to block user
     public void blockUser() {
 
         System.out.println("Enter the person's username: (to block)");
@@ -62,6 +73,7 @@ public class Admin extends ProductManager {
         users.get(username).logout();
     }
 
+    // method to unblock user
     public void unblockUser() {
 
         System.out.println("Enter the person's username: (to unblock)");

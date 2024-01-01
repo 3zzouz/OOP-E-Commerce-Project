@@ -113,6 +113,7 @@ public class Carts implements Cloneable {
         return this.products;
     }
 
+    // to change the quantity of a product in the cart
     public void changeProductQuantityInChart(int id, int quantity) {
         if (!existsProduct(id)) {
             System.out.println("Product not in cart");

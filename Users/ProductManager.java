@@ -9,10 +9,19 @@ import java.util.Scanner;
 
 import Discount.Discount;
 
+/**
+ * The ProductManager class represents a user with the role of a product manager
+ * in an e-commerce system.
+ * It extends the User class and provides functionality to manage products,
+ * including adding, removing, updating,
+ * and searching for products. It also allows the product manager to manage
+ * discounts for products.
+ */
 public class ProductManager extends User {
 
     public static HashMap<Integer, Product> products;
 
+    // Constructor
     public ProductManager() {
         super();
         permissionLevel = 1;
@@ -86,6 +95,7 @@ public class ProductManager extends User {
         return products.get(id);
     }
 
+    // method to get product price
     public static double getProductPrice(int id) {
         if (!products.containsKey(id)) {
             return -1;
@@ -93,6 +103,7 @@ public class ProductManager extends User {
         return products.get(id).getPrice();
     }
 
+    // method to get product stock quantity
     public static int getProductStockQuantity(int id) {
         if (!products.containsKey(id)) {
             return -1;
@@ -100,6 +111,7 @@ public class ProductManager extends User {
         return products.get(id).getStockQuantity();
     }
 
+    // method to remove a product from the list
     public void removeProduct() {
 
         System.out.println(
@@ -114,6 +126,7 @@ public class ProductManager extends User {
         products.remove(productId);
     }
 
+    // method to update a product in the list
     public void updateProduct() {
 
         System.out.println(
@@ -180,6 +193,7 @@ public class ProductManager extends User {
         }
     }
 
+    // method to print all products
     public static void printProducts() {
         System.out.println("Products : ");
 
@@ -188,6 +202,7 @@ public class ProductManager extends User {
         }
     }
 
+    // method to search for products using a search term and filters
     public static ArrayList<Product> searchProducts(String searchTerm, Map<String, Object> filters) {
         ArrayList<Product> results = new ArrayList<>();
         for (Product product : products.values()) {
@@ -231,10 +246,12 @@ public class ProductManager extends User {
         return results;
     }
 
+    // method to receive notifications
     public static void receiveNotifications(String s) {
         System.out.println("Notification received : " + s);
     }
 
+    // method to update product quantity
     public static void updateProductQuantity(int id, int quantity) {
         if (!products.containsKey(id)) {
             return;
@@ -244,6 +261,7 @@ public class ProductManager extends User {
 
     }
 
+    // method to add discount
     public void addDiscount() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
@@ -261,6 +279,7 @@ public class ProductManager extends User {
         Discount.addDiscount(code, percentage, expiryDate);
     }
 
+    // method to remove discount
     public void removeDiscount() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
@@ -272,6 +291,7 @@ public class ProductManager extends User {
         Discount.removeDiscount(code);
     }
 
+    // method to print discounts
     public void printDiscounts() {
         if (Discount.discounts == null || Discount.discounts.isEmpty()) {
             System.out.println("No discounts available");
@@ -280,6 +300,7 @@ public class ProductManager extends User {
         Discount.printDiscounts();
     }
 
+    // method to update discount
     public void updateDiscount() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");

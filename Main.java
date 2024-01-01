@@ -11,6 +11,11 @@ import Users.Customer;
 import Users.ProductManager;
 import Users.User;
 
+/**
+ * The Main class represents the entry point of the program. It contains the main method
+ * which initializes the database, handles user interactions, and provides menu options
+ * based on the user's permission level.
+ */
 public class Main {
     public static void main(String[] args) {
         // this section simulates the database

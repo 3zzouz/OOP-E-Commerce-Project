@@ -104,13 +104,19 @@ public class Order {
         // Applying discount
         System.out.println("Do you have a discount code ? (y/n)");
         String choice = sc.nextLine();
+        String code = "";
+        Discount discount = null;
         if (choice.equals("y")) {
             System.out.println("Enter your discount code : ");
-            String code = sc.nextLine();
-            Discount discount = Discount.getDiscount(code);
+            code = sc.nextLine();
+            discount = Discount.getDiscount(code);
             // if the discount is valid and not expired then apply it
             if (discount != null && discount.getExpiryDate().getDate().getTime() > System.currentTimeMillis()) {
                 totalPrice *= (1 - discount.getPercentage() / 100);
+                System.out.println("Discount applied successfully");
+            } else {
+                System.out.println("Invalid discount code");
+                discount = null;
             }
         }
         try {
@@ -124,6 +130,10 @@ public class Order {
                 ProductManager.updateProductQuantity(product.getId(), -product.getStockQuantity());
             // empty the cart
             customer.getCart().emptyCart();
+            // remove the discount if it was used
+            if (choice.equals("y") && discount != null) {
+                Discount.removeDiscount(code);
+            }
             shipOrder();
             customer.orders.put(orderID, this);
             orderDate = new DateFormat(new Date(System.currentTimeMillis()));

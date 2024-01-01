@@ -12,8 +12,10 @@ import Users.ProductManager;
 import Users.User;
 
 /**
- * The Main class represents the entry point of the program. It contains the main method
- * which initializes the database, handles user interactions, and provides menu options
+ * The Main class represents the entry point of the program. It contains the
+ * main method
+ * which initializes the database, handles user interactions, and provides menu
+ * options
  * based on the user's permission level.
  */
 public class Main {
@@ -67,10 +69,9 @@ public class Main {
         }
 
         int choix1 = 0;
-        outerLoop: while (true && choix1 != 4) {
+        outerLoop: while (choix1 != 4) {
             System.out.println("Welcome to our online store");
             System.out.println("Please choose one of the following options : ");
-
             int choix = 0;
             User user = null;
             loop: while (choix1 != 4) {
@@ -91,6 +92,7 @@ public class Main {
                             if (user != null) {
                                 break loop;
                             }
+                            break;
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                             break;

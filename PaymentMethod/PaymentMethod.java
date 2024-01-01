@@ -10,7 +10,7 @@ import Exceptions.NotEnoughMoneyException;
  * It provides methods to retrieve the name and balance, as well as to reduce
  * the balance.
  */
-public class PaymentMethod {
+public abstract class PaymentMethod {
     private String name;
     private double balance;
 

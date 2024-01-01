@@ -71,6 +71,7 @@ public class Admin extends ProductManager {
         }
         users.get(username).setBlocked(true);
         users.get(username).logout();
+        System.out.println("User blocked successfully");
     }
 
     // method to unblock user

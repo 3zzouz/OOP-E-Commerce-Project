@@ -53,19 +53,23 @@ public abstract class User {
         setPhoneNumber(phoneNumber);
         System.out.println("Enter your address : ");
         String addres = sc.nextLine();
+        while (addres.length() < 10) {
+            System.out.println("Address must be at least 10 characters long. Please enter your address again: ");
+            addres = sc.nextLine();
+        }
         setAddress(addres);
         System.out.println("Enter your Password: ");
         String Password = sc.nextLine();
         System.out.println("Confirm Password : ");
         String confirmPassword = sc.nextLine();
-        while (!confirmPassword.equals(Password)) {
-            System.out.println("Passwords do not match. Please enter your Password again: ");
+        while (!confirmPassword.equals(Password) || Password.length() < 8) {
+            System.out.println(
+                    "Passwords do not match or the Password is less than 8 characters Please enter your Password again: ");
             Password = sc.nextLine();
             System.out.println("Confirm Password : ");
             confirmPassword = sc.nextLine();
         }
         setPassword(Password);
-        ;
         Date date = new Date();
         this.accountCreationDate = new DateFormat(date);
         this.lastLoginDate = new DateFormat(date);

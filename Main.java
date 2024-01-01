@@ -229,7 +229,7 @@ public class Main {
                     }
                 } else if (permissionLevel == 2) {
                     choix = 0;
-                    while (choix != 12) {
+                    while (choix != 13) {
                         System.out.println("Welcome Customer");
                         System.out.println("Please choose one of the following options : ");
                         System.out.println("1- View all products");

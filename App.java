@@ -20,7 +20,6 @@ public class App {
         Scanner sc = new Scanner(System.in);
         int choix = sc.nextInt();
         sc.nextLine();
-        ;
         User user = null;
         if (choix == 1) {
             user = new Admin();

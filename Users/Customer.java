@@ -93,6 +93,7 @@ public class Customer extends User {
                     } catch (Exception e) {
                         System.out.println("Invalid Input");
                         choix = 0;
+                        break;
                     }
 
                 case 2:
@@ -107,6 +108,7 @@ public class Customer extends User {
                     } catch (Exception e) {
                         System.out.println("Invalid Input");
                         choix = 0;
+                        break;
                     }
                 case 3:
                     System.out.println("Exit");

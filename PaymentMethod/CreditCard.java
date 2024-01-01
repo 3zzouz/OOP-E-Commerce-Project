@@ -41,7 +41,8 @@ public class CreditCard extends PaymentMethod {
 
     // override toString method
     public String toString() {
-        return super.toString() + " , " + cardNumber + " , " + cardHolderName + " , " + expiryDate + " , " + cvv;
+        return super.toString() + " , " + cardNumber + " , " + cardHolderName + " , " + expiryDate.getSDate() + " , "
+                + cvv;
     }
 
     // setters

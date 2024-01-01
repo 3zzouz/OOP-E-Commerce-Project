@@ -108,7 +108,6 @@ public class Discount {
                 return discounts.get(i);
             }
         }
-        System.out.println("Discount not found");
         return null;
     }
 
@@ -127,7 +126,8 @@ public class Discount {
      * @return a string representation of the discount
      */
     public String toString() {
-        return "Code: " + this.code + "\nPercentage: " + this.percentage + "\nExpiry Date: " + this.expiryDate;
+        return "Code: " + this.code + "\nPercentage: " + this.percentage + "\nExpiry Date: "
+                + this.expiryDate.getSDate();
     }
 
     /**

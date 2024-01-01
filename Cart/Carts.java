@@ -113,6 +113,24 @@ public class Carts implements Cloneable {
         return this.products;
     }
 
+    public void changeProductQuantityInChart(int id, int quantity) {
+        if (!existsProduct(id)) {
+            System.out.println("Product not in cart");
+            return;
+        }
+        Product product = products.get(id);
+        double price = product.getPrice();
+        int oldQuantity = product.getStockQuantity();
+        if (quantity > ProductManager.getProductStockQuantity(id)) {
+            System.out.println("Not enough quantity in stock");
+            return;
+        }
+        totalPrice = totalPrice - price * oldQuantity;
+        product.setStockQuantity(quantity);
+        totalPrice = totalPrice + price * quantity;
+        products.put(id, product);
+    }
+
     // to calculate the total price of the products in the cart (without
     // discount)(useful for the checkout)
     public double getTotalPrice() {

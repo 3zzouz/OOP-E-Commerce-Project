@@ -111,6 +111,21 @@ public class App {
         customer.addProductToCart();
     }
 
+    public void updateProductInCart(Customer customer) {
+        if (customer.getCart() == null) {
+            System.out.println("Cart is empty");
+            return;
+        }
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter product id to update : ");
+        int productid = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Enter new quantity : ");
+        int quantity = sc.nextInt();
+        sc.nextLine();
+        customer.getCart().changeProductQuantityInChart(productid, quantity);
+    }
+
     public void removeProductFromCart(Customer customer) {
         customer.removeProductFromCart();
     }

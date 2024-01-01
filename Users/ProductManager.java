@@ -45,18 +45,22 @@ public class ProductManager extends User {
                 case 1:
                     product = new Clothing();
                     products.put(product.getId(), product);
+                    System.out.println("Product added successfully");
                     break;
                 case 2:
                     product = new Electronics();
                     products.put(product.getId(), product);
+                    System.out.println("Product added successfully");
                     break;
                 case 3:
                     product = new Books();
                     products.put(product.getId(), product);
+                    System.out.println("Product added successfully");
                     break;
                 case 4:
                     product = new SportsAndOutDoor();
                     products.put(product.getId(), product);
+                    System.out.println("Product added successfully");
                     break;
                 case 5:
                     System.out.println("Exit");
@@ -103,13 +107,11 @@ public class ProductManager extends User {
         Scanner sc = new Scanner(System.in);
         int productId = sc.nextInt();
         sc.nextLine();
-        ;
         if (!existProduct(productId)) {
             System.out.println("Product does not exist");
             return;
         }
         products.remove(productId);
-
     }
 
     public void updateProduct() {
@@ -139,19 +141,20 @@ public class ProductManager extends User {
             switch (choix) {
                 case 1:
                     System.out.println("Enter the new name : ");
-                    String name = sc.next();
+                    String name = sc.nextLine();
                     product.setName(name);
                     System.out.println("Product Name updated successfully");
                     break;
                 case 2:
                     System.out.println("Enter the new description : ");
-                    String description = sc.next();
+                    String description = sc.nextLine();
                     product.setDescription(description);
                     System.out.println("Product Description updated successfully");
                     break;
                 case 3:
                     System.out.println("Enter the new price : ");
                     double price = sc.nextDouble();
+                    sc.nextLine();
                     product.setPrice(price);
                     System.out.println("Product Price updated successfully");
                     break;
@@ -164,7 +167,7 @@ public class ProductManager extends User {
                     break;
                 case 5:
                     System.out.println("Enter the new image URL : ");
-                    String imageUrl = sc.next();
+                    String imageUrl = sc.nextLine();
                     product.setImageUrl(imageUrl);
                     System.out.println("Product Image URL updated successfully");
                     break;
@@ -175,8 +178,6 @@ public class ProductManager extends User {
                     break;
             }
         }
-        System.out.println("Product updated successfully");
-
     }
 
     public static void printProducts() {
@@ -247,10 +248,16 @@ public class ProductManager extends User {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter discount code: ");
         String code = sc.nextLine();
+        while (Discount.getDiscount(code) != null) {
+            System.out.println("Discount code already exists");
+            System.out.println("Enter discount code: ");
+            code = sc.nextLine();
+        }
         System.out.println("Enter discount percentage: (0-100)");
         double percentage = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Enter discount expiry date: (dd/mm/yyyy hh:mm:ss)");
-        String expiryDate = sc.next();
+        String expiryDate = sc.nextLine();
         Discount.addDiscount(code, percentage, expiryDate);
     }
 
@@ -291,16 +298,22 @@ public class ProductManager extends User {
             System.out.println("Enter the field you want to update : ");
             System.out.println("1- Percentage");
             System.out.println("2- Expiry Date");
+            System.out.println("3- Exit");
+            choix = sc.nextInt();
+            sc.nextLine();
             switch (choix) {
                 case 1:
                     System.out.println("Enter the new percentage : ");
                     double percentage = sc.nextDouble();
+                    sc.nextLine();
                     discount.setPercentage(percentage);
+                    System.out.println("Discount Percentage updated successfully");
                     break;
                 case 2:
                     System.out.println("Enter the new expiry date : ");
-                    String expiryDate = sc.next();
+                    String expiryDate = sc.nextLine();
                     discount.setExpiryDate(expiryDate);
+                    System.out.println("Discount Expiry Date updated successfully");
                     break;
                 case 3:
                     System.out.println("Exit");

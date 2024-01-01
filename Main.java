@@ -61,230 +61,240 @@ public class Main {
             User.users.put(productManager1.getUsername(), productManager1);
         }
 
-        System.out.println("Welcome to our online store");
-        System.out.println("Please choose one of the following options : ");
+        int choix1 = 0;
+        outerLoop: while (true && choix1 != 4) {
+            System.out.println("Welcome to our online store");
+            System.out.println("Please choose one of the following options : ");
 
-        int choix = 0;
-        User user = null;
-        while (choix != 4) {
-            System.out.println("1- Login ");
-            System.out.println("2- Create a new account ");
-            System.out.println("3- Reset password ");
-            System.out.println("4- Exit ");
-            if (sc.hasNextInt()) {
-                choix = sc.nextInt();
-                sc.nextLine();
-            } else {
-                System.out.println("Please enter an integer");
-            }
-            switch (choix) {
-                case 1:
-                    try {
-                        user = app.login();
-                        choix = 4;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+            int choix = 0;
+            User user = null;
+            loop: while (choix1 != 4) {
+                System.out.println("1- Login ");
+                System.out.println("2- Create a new account ");
+                System.out.println("3- Reset password ");
+                System.out.println("4- Exit ");
+                if (sc.hasNextInt()) {
+                    choix1 = sc.nextInt();
+                    sc.nextLine();
+                } else {
+                    System.out.println("Please enter an integer");
+                }
+                switch (choix1) {
+                    case 1:
+                        try {
+                            user = app.login();
+                            if (user != null) {
+                                break loop;
+                            }
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            break;
+                        }
+                    case 2:
+                        app.createUser();
                         break;
-                    }
-                    break;
-                case 2:
-                    app.createUser();
-                    break;
-                case 3:
-                    app.changePassword();
-                    break;
-                case 4:
-                    System.out.println("Closing Menu !");
-                    break;
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+                    case 3:
+                        app.changePassword();
+                        break;
+                    case 4:
+                        System.out.println("Closing Menu !");
+                        break;
+                    default:
+                        System.out.println("Invalid choice");
+                        break;
+                }
             }
-        }
-        if (user != null && user.getIsLoggedIn()) {
-            int permissionLevel = user.getPermissionLevel();
-            if (permissionLevel == 0) {
-                choix = 0;
-                while (choix != 10) {
-                    System.out.println("Welcome Admin");
-                    System.out.println("Please choose one of the following options : ");
-                    System.out.println("1- View all users");
-                    System.out.println("2- View a user");
-                    System.out.println("3- Block a user");
-                    System.out.println("4- View all products");
-                    System.out.println("5- Filter products");
-                    System.out.println("6- Add a product");
-                    System.out.println("7- Edit a product");
-                    System.out.println("8- Delete a product");
-                    System.out.println("9- Logout");
-                    System.out.println("10- Exit");
-                    choix = sc.nextInt();
-                    sc.nextLine();
-                    switch (choix) {
-                        case 1:
-                            app.viewAllUsers((Admin) user);
-                            break;
-                        case 2:
-                            app.viewUser((Admin) user);
-                            break;
-                        case 3:
-                            app.blockUser((Admin) user);
-                            break;
-                        case 4:
-                            app.viewAllProducts();
-                            break;
-                        case 5:
-                            app.searchProduct();
-                            break;
-                        case 6:
-                            app.addProducts((Admin) user);
-                            break;
-                        case 7:
-                            app.updateProductInventory((Admin) user);
-                            break;
-                        case 8:
-                            app.removeProduct((Admin) user);
-                            break;
-                        case 9:
-                            app.logout(user);
-                            System.out.println("Logging out !");
-                            choix = 10;
-                            break;
-                        case 10:
-                            System.out.println("Closing Menu !");
-                            break;
-                        default:
-                            System.out.println("Invalid choice");
-                            break;
-                    }
-                }
-            } else if (permissionLevel == 1) {
-                choix = 0;
-                while (choix != 11) {
-                    System.out.println("Welcome Product Manager");
-                    System.out.println("Please choose one of the following options : ");
-                    System.out.println("1- View all products");
-                    System.out.println("2- Filter products");
-                    System.out.println("3- Add a product");
-                    System.out.println("4- Edit a product");
-                    System.out.println("5- Delete a product");
-                    System.out.println("6- AddDiscount");
-                    System.out.println("7- RemoveDiscount");
-                    System.out.println("8- UpdateDiscount");
-                    System.out.println("9- Show all discounts");
-                    System.out.println("10- Logout");
-                    System.out.println("11- Exit");
-                    choix = sc.nextInt();
-                    sc.nextLine();
-                    switch (choix) {
-                        case 1:
-                            app.viewAllProducts();
-                            break;
-                        case 2:
-                            app.searchProduct();
-                            break;
-                        case 3:
-                            app.addProducts((ProductManager) user);
-                            break;
-                        case 4:
-                            app.updateProductInventory((ProductManager) user);
-                            break;
-                        case 5:
-                            app.removeProduct((ProductManager) user);
-                            break;
-                        case 6:
-                            app.addDiscount((ProductManager) user);
-                            break;
-                        case 7:
-                            app.removeDiscount((ProductManager) user);
-                            break;
-                        case 8:
-                            app.updateDiscount((ProductManager) user);
-                            break;
-                        case 9:
-                            app.printDiscounts((ProductManager) user);
-                            break;
-                        case 10:
-                            app.logout(user);
-                            System.out.println("Logging out !");
-                            choix = 11;
-                            break;
-                        case 11:
-                            System.out.println("Closing Menu !");
-                            break;
-                        default:
-                            System.out.println("Invalid choice");
-                            break;
-                    }
-                }
-            } else if (permissionLevel == 2) {
-                choix = 0;
-                while (choix != 12) {
-                    System.out.println("Welcome Customer");
-                    System.out.println("Please choose one of the following options : ");
-                    System.out.println("1- View all products");
-                    System.out.println("2- Filter products");
-                    System.out.println("3- Add to cart");
-                    System.out.println("4- View cart");
-                    System.out.println("5- Remove from cart");
-                    System.out.println("6- Checkout");
-                    System.out.println("7- View orders");
-                    System.out.println("8- Clear Chart");
-                    System.out.println("9- Add Payment Method");
-                    System.out.println("10- View Payment Methods");
-                    System.out.println("11- Logout");
-                    System.out.println("12- Exit");
-                    if (sc.hasNextInt()) {
+            if (user != null && user.getIsLoggedIn()) {
+                int permissionLevel = user.getPermissionLevel();
+                if (permissionLevel == 0) {
+                    choix = 0;
+                    while (choix != 11) {
+                        System.out.println("Welcome Admin");
+                        System.out.println("Please choose one of the following options : ");
+                        System.out.println("1- View all users");
+                        System.out.println("2- View a user");
+                        System.out.println("3- Block a user");
+                        System.out.println("4- Unblock a user");
+                        System.out.println("5- View all products");
+                        System.out.println("6- Filter products");
+                        System.out.println("7- Add a product");
+                        System.out.println("8- Edit a product");
+                        System.out.println("9- Delete a product");
+                        System.out.println("10- Logout");
+                        System.out.println("11- Exit");
                         choix = sc.nextInt();
                         sc.nextLine();
-                    } else {
-                        System.out.println("No integer to read");
+                        switch (choix) {
+                            case 1:
+                                app.viewAllUsers((Admin) user);
+                                break;
+                            case 2:
+                                app.viewUser((Admin) user);
+                                break;
+                            case 3:
+                                app.blockUser((Admin) user);
+                                break;
+                            case 4:
+                                app.unblockUser((Admin) user);
+                                break;
+                            case 5:
+                                app.viewAllProducts();
+                                break;
+                            case 6:
+                                app.searchProduct();
+                                break;
+                            case 7:
+                                app.addProducts((Admin) user);
+                                break;
+                            case 8:
+                                app.updateProductInventory((Admin) user);
+                                break;
+                            case 9:
+                                app.removeProduct((Admin) user);
+                                break;
+                            case 10:
+                                app.logout(user);
+                                System.out.println("Logging out !");
+                                continue outerLoop;
+                            case 11:
+                                System.out.println("Closing Menu !");
+                                break;
+                            default:
+                                System.out.println("Invalid choice");
+                                break;
+                        }
                     }
-                    switch (choix) {
-                        case 1:
-                            app.viewAllProducts();
-                            break;
-                        case 2:
-                            app.searchProduct();
-                            break;
-                        case 3:
-                            app.addProductToCart((Customer) user);
-                            break;
-                        case 4:
-                            app.viewCart((Customer) user);
-                            break;
-                        case 5:
-                            app.removeProductFromCart((Customer) user);
-                            break;
-                        case 6:
-                            app.checkout((Customer) user);
-                            break;
-                        case 7:
-                            app.viewOrders((Customer) user);
-                            break;
-                        case 8:
-                            app.clearCart((Customer) user);
-                            break;
-                        case 9:
-                            app.addPaymentMethod((Customer) user);
-                            break;
-                        case 10:
-                            app.viewPaymentMethods((Customer) user);
-                            break;
-                        case 11:
-                            app.logout(user);
-                            System.out.println("Logging out !");
-                            choix = 12;
-                            break;
-                        case 12:
-                            System.out.println("Closing Menu !");
-                            break;
-                        default:
-                            System.out.println("Invalid choice");
-                            break;
+                } else if (permissionLevel == 1) {
+                    choix = 0;
+                    while (choix != 11) {
+                        System.out.println("Welcome Product Manager");
+                        System.out.println("Please choose one of the following options : ");
+                        System.out.println("1- View all products");
+                        System.out.println("2- Filter products");
+                        System.out.println("3- Add a product");
+                        System.out.println("4- Edit a product");
+                        System.out.println("5- Delete a product");
+                        System.out.println("6- AddDiscount");
+                        System.out.println("7- RemoveDiscount");
+                        System.out.println("8- UpdateDiscount");
+                        System.out.println("9- Show all discounts");
+                        System.out.println("10- Logout");
+                        System.out.println("11- Exit");
+                        choix = sc.nextInt();
+                        sc.nextLine();
+                        switch (choix) {
+                            case 1:
+                                app.viewAllProducts();
+                                break;
+                            case 2:
+                                app.searchProduct();
+                                break;
+                            case 3:
+                                app.addProducts((ProductManager) user);
+                                break;
+                            case 4:
+                                app.updateProductInventory((ProductManager) user);
+                                break;
+                            case 5:
+                                app.removeProduct((ProductManager) user);
+                                break;
+                            case 6:
+                                app.addDiscount((ProductManager) user);
+                                break;
+                            case 7:
+                                app.removeDiscount((ProductManager) user);
+                                break;
+                            case 8:
+                                app.updateDiscount((ProductManager) user);
+                                break;
+                            case 9:
+                                app.printDiscounts((ProductManager) user);
+                                break;
+                            case 10:
+                                app.logout(user);
+                                System.out.println("Logging out !");
+                                continue outerLoop;
+                            case 11:
+                                System.out.println("Closing Menu !");
+                                break;
+                            default:
+                                System.out.println("Invalid choice");
+                                break;
+                        }
+                    }
+                } else if (permissionLevel == 2) {
+                    choix = 0;
+                    while (choix != 12) {
+                        System.out.println("Welcome Customer");
+                        System.out.println("Please choose one of the following options : ");
+                        System.out.println("1- View all products");
+                        System.out.println("2- Filter products");
+                        System.out.println("3- Add to cart");
+                        System.out.println("4- View cart");
+                        System.out.println("5- Remove from cart");
+                        System.out.println("6- Update quantity in cart");
+                        System.out.println("7- Checkout");
+                        System.out.println("8- View orders");
+                        System.out.println("9- Clear Chart");
+                        System.out.println("10- Add Payment Method");
+                        System.out.println("11- View Payment Methods");
+                        System.out.println("12- Logout");
+                        System.out.println("13- Exit");
+                        if (sc.hasNextInt()) {
+                            choix = sc.nextInt();
+                            sc.nextLine();
+                        } else {
+                            System.out.println("No integer to read");
+                        }
+                        switch (choix) {
+                            case 1:
+                                app.viewAllProducts();
+                                break;
+                            case 2:
+                                app.searchProduct();
+                                break;
+                            case 3:
+                                app.addProductToCart((Customer) user);
+                                break;
+                            case 4:
+                                app.viewCart((Customer) user);
+                                break;
+                            case 5:
+                                app.removeProductFromCart((Customer) user);
+                                break;
+                            case 6:
+                                app.updateProductInCart((Customer) user);
+                                break;
+                            case 7:
+                                app.checkout((Customer) user);
+                                break;
+                            case 8:
+                                app.viewOrders((Customer) user);
+                                break;
+                            case 9:
+                                app.clearCart((Customer) user);
+                                break;
+                            case 10:
+                                app.addPaymentMethod((Customer) user);
+                                break;
+                            case 11:
+                                app.viewPaymentMethods((Customer) user);
+                                break;
+                            case 12:
+                                app.logout(user);
+                                System.out.println("Logging out !");
+                                continue outerLoop;
+                            case 13:
+                                System.out.println("Closing Menu !");
+                                break;
+                            default:
+                                System.out.println("Invalid choice");
+                                break;
+                        }
                     }
                 }
             }
+
         }
         sc.close();
     }

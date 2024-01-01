@@ -25,6 +25,7 @@ public abstract class Product {
         String description = sc.nextLine();
         System.out.println("Enter product price: ");
         double price = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Enter product stock quantity: ");
         int stockQuantity = sc.nextInt();
         sc.nextLine();

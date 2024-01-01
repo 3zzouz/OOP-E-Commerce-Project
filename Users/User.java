@@ -129,18 +129,15 @@ public abstract class User {
         }
         User user = users.get(username);
         user.login(Password);
-        System.out.println("You are now logged in. Welcome " + user.name + "!");
+        if (user.isLoggedIn)
+            System.out.println("You are now logged in. Welcome " + user.username + "!");
         return user;
     }
 
     // logout function
     public void logout() {
-        if (this.isLoggedIn == false) {
-            System.out.println("You are already logged out.");
-        } else {
-            this.isLoggedIn = false;
-            users.put(this.username, this);
-        }
+        this.isLoggedIn = false;
+        users.put(this.username, this);
     }
 
     public static void logout(String username) {
@@ -191,8 +188,10 @@ public abstract class User {
                 "Enter the min and max price of the product you want to search : (to search for a particular price enter the same min and max and if there is no min or max enter 0 for the non desired value)");
         System.out.println("Min price : ");
         double minPrice = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Max price : ");
         double maxPrice = sc.nextDouble();
+        sc.nextLine();
         ;
         if (minPrice > maxPrice) {
             System.out.println("Invalid input");

@@ -2,6 +2,7 @@ package Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 /**
  * The DateFormat class provides methods to convert between Date objects and
@@ -32,10 +33,26 @@ public class DateFormat {
     public DateFormat(String s) {
         this.sdate = s;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        try {
-            this.date = format.parse(s);
-        } catch (Exception e) {
-            System.out.println("Error in parsing date");
+        format.setLenient(false);
+
+        while (true) {
+            try {
+                Date parsedDate = format.parse(s);
+                Date now = new Date();
+
+                if (parsedDate.before(now)) {
+                    System.out.println("The date is before the current time. Please enter a new date:");
+                } else {
+                    this.date = parsedDate;
+                    this.sdate = s;
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Error in parsing date. Please enter a new date:");
+            }
+
+            Scanner scanner = new Scanner(System.in);
+            s = scanner.nextLine();
         }
     }
 

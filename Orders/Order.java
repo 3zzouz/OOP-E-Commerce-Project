@@ -125,6 +125,7 @@ public class Order {
             // empty the cart
             customer.getCart().emptyCart();
             shipOrder();
+            customer.orders.put(orderID, this);
             orderDate = new DateFormat(new Date(System.currentTimeMillis()));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -204,7 +205,7 @@ public class Order {
         }
         try {
             int choix = 0;
-            while (choix != 3) {
+            while (choix != 1 && choix != 2) {
                 System.out.println("Enter the payment Method : ");
                 System.out.println("1- PaCredit Card");
                 System.out.println("2- Paypal");
@@ -216,13 +217,12 @@ public class Order {
                     case 1:
                         customer.getPaymentMethod(0).reduceBalance(totalPrice);
                         customer.incrementOccurenceCounter(0);
+                        System.out.println("Payment Successful");
                         break;
                     case 2:
                         customer.getPaymentMethod(1).reduceBalance(totalPrice);
                         customer.incrementOccurenceCounter(1);
-                        break;
-                    case 3:
-                        System.out.println("Exit !");
+                        System.out.println("Payment Successful");
                         break;
                     default:
                         break;
@@ -238,10 +238,10 @@ public class Order {
     public String toString() {
         String res = "";
         res += orderID + ",";
-        res += orderDate + ",";
+        res += orderDate.getSDate() + ",";
         res += orderStatus + ",";
         for (Product product : products.values())
-            res += product.toString() + ",";
+            res += product.getName() + "," + product.getStockQuantity() + ",";
         res += totalPrice;
         return res;
     }

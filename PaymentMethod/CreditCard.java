@@ -2,20 +2,22 @@ package PaymentMethod;
 
 import java.util.Date;
 
+import Utility.DateFormat;
+
 /**
  * Represents a credit card payment method.
  * Extends the PaymentMethod class.
  */
 public class CreditCard extends PaymentMethod {
     private int cardNumber, cvv;
-    private Date expiryDate;
+    private DateFormat expiryDate;
     private String cardHolderName;
 
     // parameterized constructor
     public CreditCard(int cardNumber, String name, Date expiryDate, int cvv) {
         super("Credit Card");
         this.cardNumber = cardNumber;
-        this.expiryDate = expiryDate;
+        this.expiryDate = new DateFormat(expiryDate);
         this.cvv = cvv;
         this.cardHolderName = name;
     }
@@ -25,7 +27,7 @@ public class CreditCard extends PaymentMethod {
         return cardNumber;
     }
 
-    protected Date getExpiryDate() {
+    protected DateFormat getExpiryDate() {
         return expiryDate;
     }
 
@@ -48,7 +50,7 @@ public class CreditCard extends PaymentMethod {
     }
 
     protected void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
+        this.expiryDate = new DateFormat(expiryDate);
     }
 
     protected void setCvv(int cvv) {

@@ -13,7 +13,7 @@ import PaymentMethod.PaymentMethod;
 import PaymentMethod.Paypal;
 
 public class Customer extends User {
-    private HashMap<String, Order> orders;
+    public HashMap<String, Order> orders;
     private Carts cart;
     private PaymentMethod[] paymentMethods = new PaymentMethod[2];
     private PaymentMethod preferredPaymentMethod;
@@ -74,14 +74,15 @@ public class Customer extends User {
                         sc.nextLine();
                         System.out.println("Enter your Credit Card Holder Name : ");
                         String name = sc.nextLine();
-                        System.out.println("Enter your Credit Card Expiry Date (format: dd/MM/yyyy) : ");
+                        System.out.println("Enter your Credit Card Expiry Date (format: dd/MM/yyyy hh:mm:ss) : ");
                         String expiryDateString = sc.nextLine();
-                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
                         Date expiryDate = formatter.parse(expiryDateString);
                         System.out.println("Enter your Credit Card CVV : ");
                         int cvv = sc.nextInt();
                         sc.nextLine();
                         this.paymentMethods[0] = new CreditCard(cardNumber, name, expiryDate, cvv);
+                        System.out.println("Credit Card Added Successfully");
                         break;
                     } catch (Exception e) {
                         System.out.println("Invalid Input");
@@ -95,6 +96,7 @@ public class Customer extends User {
                         System.out.println("Enter your Paypal Password : ");
                         String password = sc.nextLine();
                         this.paymentMethods[1] = new Paypal(email, password);
+                        System.out.println("Paypal Added Successfully");
                         break;
                     } catch (Exception e) {
                         System.out.println("Invalid Input");
@@ -145,7 +147,6 @@ public class Customer extends User {
         System.out.println("Enter quantity: ");
         int quantity = sc.nextInt();
         sc.nextLine();
-        ;
         cart.addProduct(productID, quantity);
     }
 
@@ -158,7 +159,6 @@ public class Customer extends User {
         System.out.println("Enter product id to remove : ");
         int productid = sc.nextInt();
         sc.nextLine();
-        ;
         cart.removeProduct(productid);
     }
 
@@ -185,7 +185,6 @@ public class Customer extends User {
             return;
         }
         Order order = new Order(this);
-        orders.put(order.getOrderID(), order);
     }
 
     public void incrementOccurenceCounter(int index) {

@@ -48,7 +48,7 @@ Features:
 - Disconnect
 - Close this Menu and go back to the first Menu
 
-## 3.Product Manager Menu:
+## 4.Product Manager Menu:
 
 Connection:Product Manager can log in with their username and password.
 
@@ -108,20 +108,20 @@ The code is organized into several classes for better readability.
 
 - `Main` : Entry point to the console application
 
-## 5. Design Decisions:
+## 6. Design Decisions:
 
 - Object-Oriented Approach: The application is designed using an object-oriented approach to encapsulate data and behaviors in classes. This makes the code modular, scalable, and easier to maintain.
 - Data Structures: HashMaps are used to store the products in stock, manage the products in the cart, and map the clients in the application. ArrayList maintains the history of the clients' orders.
 - User Authentication: User authentication is implemented using a simple HashMap where the usernames are the keys and the passwords are the values. For simplicity, passwords after being hashed are stored in plain text.
 
-## 6. OOP Implementation:
+## 7. OOP Implementation:
 
 - Inheritance: The `Admin` and `Customer` and `ProductManager` classes inherit from the `User` class, representing a hierarchical relationship.
 - Encapsulation: Data encapsulation is achieved by making the attributes private and providing public methods to access and modify them which is done in many classes.
 - Polymorphism : Is achieved in this project for example in the `Admin` and `Customer` and other subclasses i have overridden methods such as toString()
 - Abstraction : Is also achieved in this project by using abstract classes such as `User` and `Product` and `PaymentMethod`
 
-## 7. Optional Features:
+## 8. Optional Features:
 
 - Discounts and Promotions: Implemented a system for applying discount codes and promotions to purchases. Customers can enter a discount code at checkout to receive a percentage off their total purchase price.
 

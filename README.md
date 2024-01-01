@@ -131,4 +131,4 @@ The code is organized into several classes for better readability.
 For more information, you will find well-commented code that will guide you when reading the code and during its execution.
 For many classes and methods when you hover on them you will find all the information needed
 
-Work done by Dhouibi Mohamed Aziz GL2/2
+Work done by Dhouibi Mohamed Aziz GL2/1

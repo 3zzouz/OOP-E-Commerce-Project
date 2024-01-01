@@ -13,9 +13,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 2. Administrator Menu:
 
-# Connection: Administrators can log in with their username and password.
+Connection: Administrators can log in with their username and password.
 
-# Features:
+Features:
 
 - View the list of clients: display the list of registered clients
 - View a user: view a user in the list of of users
@@ -31,9 +31,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 3. Customers Menu:
 
-# Connection: Clients can log in with their username and password.
+Connection: Clients can log in with their username and password.
 
-# Features:
+Features:
 
 - View all Products in the stock
 - Search for Products using filters
@@ -50,9 +50,9 @@ And if you login based on the permissionLevel you will be given Menu for either 
 
 ## 3.Product Manager Menu:
 
-# Connection:Product Manager can log in with their username and password.
+Connection:Product Manager can log in with their username and password.
 
-# Features:
+Features:
 
 - View all Products in the stock
 - Search for Products using filters

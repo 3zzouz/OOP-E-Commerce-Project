@@ -94,8 +94,9 @@ The code is organized into several classes for better readability.
 
 - Utility: -`DateFormat`: The DateFormat class provides methods to convert between Date objects and formatted date strings.
 - Shipping :
-
-  - `ShippingMethod` : The abstract class representing a shipping method. -`StandardShipping` :The StandardShipping class represents a standard shipping method for an order. It extends the ShippingMethod class and provides a default constructor and a method to calculate the shipping cost. -`ExpressShippingMethod` : Represents an express shipping method for an order.
+  - `ShippingMethod` : The abstract class representing a shipping method.
+    -`StandardShipping` :The StandardShipping class represents a standard shipping method for an order. It extends the ShippingMethod class and provides a default constructor and a method to calculate the shipping cost.
+    -`ExpressShippingMethod` : Represents an express shipping method for an order.
 
 - `User`: The abstract user class represents a user in the e-commerce system. It provides methods for user registration, login, logout, and password management.Users can search for products using filters.
 - `ProductManager`:The ProductManager class represents a user with the role of a product manager in an e-commerce system. It extends the User class and provides functionality to manage products,including adding, removing, updating,and searching for products. It also allows the product manager to manage discounts for products.

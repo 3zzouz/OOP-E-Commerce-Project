@@ -2,14 +2,15 @@
 
 ## 1. Application Access:
 
-You should access the console application from the Main.java
-The App.java is used to group the functions used in the Main.java
-I have already created 3 users one is a customer which is the one with the lowest permission level and the other is a product manager with more permissions (mainly managing product inventory) and the admin level with higher accesslevel (managing both inventory and users list)
+You should access the console application from the Main.java.
+The App.java is used to group the functions used in the Main.java.
+I have already created 3 users one is a customer which is the one with the lowest permission level and the other is a product manager with more permissions (mainly managing product inventory) and the admin level with higher accesslevel (managing both inventory and users list).
 And i have created 4 products one of each type : Books and Clothing and Electronics and SportAndOutDoor
 To access the application as an administrator, use the username "admin1" and the password "admin1password".
 To access the application as a customer, use the username "customer1" and the password "customer1password".
+You can also access it as product manager with the username "productmanager1" and the password "productmanager1password".
 When you run the application, it will give 4 options : to login with one of the existant accounts or to create a new account after choosing which type of new user you want or to reset password or simply to exit and therefore close the application.
-And if you login based on the permissionLevel you will be given Menu for either Administrator or Customer or ProductManager
+And if you login based on the permissionLevel you will be given Menu for either Administrator or Customer or ProductManager.
 
 ## 2. Administrator Menu:
 
@@ -31,7 +32,7 @@ Features:
 
 ## 3. Customers Menu:
 
-Connection: Clients can log in with their username and password.
+Connection: Customers can log in with their username and password.
 
 Features:
 
@@ -113,7 +114,7 @@ The code is organized into several classes for better readability.
 
 - Object-Oriented Approach: The application is designed using an object-oriented approach to encapsulate data and behaviors in classes. This makes the code modular, scalable, and easier to maintain.
 - Data Structures: HashMaps are used to store the products in stock, manage the products in the cart, and map the clients in the application. ArrayList maintains the history of the clients' orders.
-- User Authentication: User authentication is implemented using a simple HashMap where the usernames are the keys and the passwords are the values. For simplicity, passwords after being hashed are stored in plain text.
+- User Authentication: User authentication is implemented using a simple HashMap where the usernames are the keys and the users are the values. For simplicity, passwords after being hashed (for more security to protect the user account when inspected by an admin) are stored in plain text.
 
 ## 7. OOP Implementation:
 
@@ -129,7 +130,7 @@ The code is organized into several classes for better readability.
 - Multiple Shipping Options: Introduced the concept of shipping options. Customers can choose between standard and express shipping methods, each method affecting the cost of the orders.
 
 For more information, you will find well-commented code that will guide you when reading the code and during its execution.
-For many classes and methods when you hover on them you will find all the information needed
+For many classes and methods when you hover on them you will find all the information needed.
 Work done by Dhouibi Mohamed Aziz GL2/1
 
 

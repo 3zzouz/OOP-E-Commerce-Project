@@ -135,8 +135,9 @@ Work done by Dhouibi Mohamed Aziz GL2/1
 
 
 ## Getting Started
-```
+
 To run the app , type in the terminal :
+```
 git clone https://github.com/3zzouz/OOP-E-Commerce-Project
 cd OOP-E-Commerce-Project
 javac Main.java
